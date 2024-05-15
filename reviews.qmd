@@ -1,0 +1,23 @@
+---
+title: ""
+---
+:::: {.columns}
+
+::: {.column width="40%"}
+<p style="font-size:25px;"> 
+Welcome to our Testimonials and Reviews section, where our customers' voices shine. Dive into a collection of genuine feedback reflecting satisfaction, trust, and appreciation for our products/services. These testimonials encapsulate our commitment to quality, service, and innovation.
+
+Explore diverse perspectives from our clients, sharing insights into the impact we've had on individuals and businesses. Join us in celebrating the relationships and success stories created through shared experiences.
+
+Thank you for considering the thoughts of those who matter most – our incredible customers.
+</p>
+:::
+
+::: {.column width="60%}
+
+<p> <span style="color: magenta">Explore the exceptional feedback on akrun in the [Reddit community](https://www.reddit.com/r/rstats/comments/m32h4q/user_akrun_on_stackoverflow/) showcased below.</span></p>
+
+![review1](IMG_4841.jpeg)
+![review2](IMG_4842.jpeg)
+:::
+::::

@@ -1,0 +1,37 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - /index.qmd
+    - /about.qmd
+    - /background.qmd
+    - /reviews.qmd
+    - /hobbies.qmd
+  resources:
+    - akrun_analytics_intro.mp4
+
+website:
+  title: "akrun Analytics"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Why akrun Analytics?
+      - href: about.qmd
+        text: About
+      - href: background.qmd
+        text: Background
+      - href: reviews.qmd
+        text: Reviews
+      - href: hobbies.qmd
+        text: Hobbies
+
+format:
+  html: 
+    title: "akrun Analytics | Elevating businesses into Singularity"
+    theme: 
+     dark: slate
+     light: minty
+    css: styles.css
+    page-layout: full
+    
+editor: visual
