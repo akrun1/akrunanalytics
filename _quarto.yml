@@ -11,11 +11,11 @@ project:
     - akrun_analytics_intro.mp4
 
 website:
-  title: "akrun Analytics"
+  title: "akЯun Analytics"
   navbar:
     left:
       - href: index.qmd
-        text: Why akrun Analytics?
+        text: Why akЯun Analytics?
       - href: about.qmd
         text: About
       - href: background.qmd
@@ -27,7 +27,7 @@ website:
 
 format:
   html: 
-    title: "akrun Analytics | Elevating businesses into Singularity"
+    title: "akЯun Analytics | Elevating businesses into Singularity"
     theme: 
      dark: slate
      light: minty
