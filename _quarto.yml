@@ -2,13 +2,13 @@ project:
   type: website
   output-dir: docs
   render:
-    - /index.qmd
-    - /about.qmd
+    #- /index.qmd
+    #- /about.qmd
     - /background.qmd
-    - /reviews.qmd
-    - /hobbies.qmd
-  resources:
-    - akrun_analytics_intro.mp4
+    #- /reviews.qmd
+    #- /hobbies.qmd
+  #resources:
+    #- akrun_analytics_intro.mp4
 
 website:
   title: "akЯun Analytics"
