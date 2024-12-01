@@ -6,45 +6,40 @@ format:
     
 about: 
   template: marquee
-
 ---
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="60%"}
-<p style="font-size:20px;"> 
-Arun Kirshna Sasikala Appukuttan: Analytics pro with 20+ years (10+ industry, 10+ research). Expert in <span style="color: blue">R</span> (15+ yrs), Python (5), SQL (5), Java (2+). Holds a Ph.D. in Quantitative Genetics. Passionate about tech, data, and cutting-edge analytics. Proven track record, dynamic and innovative approach.
+<p style="font-size:20px;">
+
+Arun Kirshna Sasikala Appukuttan: Analytics pro with 20+ years (10+ industry, 10+ research). Expert in [R]{style="color: blue"} (15+ yrs - all time top R contributor in Stackoverflow), Python (5), SQL (5), Java (2+). Holds a Ph.D. in Quantitative Genetics. Passionate about tech, data, and cutting-edge analytics. Proven track record, dynamic and innovative approach.
+
 </p>
 
-![](topR.png){width=80%}
-
-
-
+![](topR.png){width="80%"}
 :::
 
 ::: {.column width="40%"}
-
 ## Education
-  
-  University of Maryland \| College Park, MD \| PhD in Quantitative Genetics \| Aug 2006 - May 2010
-  
-  South Dakota State University \| Brooking, SD \| MS in Dairy Nutrition \| Aug 2004 - Jul 2006
-  
+
+University of Maryland \| College Park, MD \| PhD in Quantitative Genetics \| Aug 2006 - May 2010
+
+South Dakota State University \| Brooking, SD \| MS in Dairy Nutrition \| Aug 2004 - Jul 2006
+
 ## Experience
-  
-  Ames Energy \| Head Data Scientist \| Oct 2018 - present
-  
-  Scifluent \| Data Scientist\|Data Engineer \| Jul 2018 - Apr 2020
-  
-  Accenture \| Analytics Advisory Specialist \| Sep 2015 - Apr 2018
-  
+
+Ames Energy \| Senior Data Scientist \| Oct 2018 - present
+
+Scifluent \| Data Scientist\|Data Engineer \| Jul 2018 - Apr 2020
+
+Accenture \| Analytics Advisory Specialist \| Sep 2015 - Apr 2018
+
 ## Contact
 
 For data science services please contact:
 
-{{< fa envelope size=1x >}} akrun111@gmail.com
+{{< fa envelope size=1x >}} akrun111\@gmail.com
 
 {{< fa mobile size=1x >}} +1-613-868-7485
-
 :::
-::::
+:::
