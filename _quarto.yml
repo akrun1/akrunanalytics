@@ -14,16 +14,16 @@ website:
   title: "akЯun Analytics"
   navbar:
     left:
-      - href: index.qmd
-        text: Why akЯun Analytics?
-      - href: about.qmd
-        text: About
+      #- href: index.qmd
+      #  text: Why akЯun Analytics?
+      #- href: about.qmd
+      #  text: About
       - href: background.qmd
         text: Background
-      - href: reviews.qmd
-        text: Reviews
-      - href: hobbies.qmd
-        text: Hobbies
+      #- href: reviews.qmd
+      #  text: Reviews
+      #- href: hobbies.qmd
+       # text: Hobbies
 
 format:
   html: 
