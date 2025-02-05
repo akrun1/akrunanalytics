@@ -1,8 +1,0 @@
----
-title: ""
-
----
-
-
-
-{{< video akrun_analytics_intro.mp4 width="1400" height="800">}}
