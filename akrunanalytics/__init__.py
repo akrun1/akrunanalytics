@@ -5,6 +5,7 @@ from flask import Flask, render_template, request
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
+import datetime
 
 # Setup more detailed logging
 logging.basicConfig(level=logging.DEBUG, 
@@ -68,17 +69,24 @@ try:
         logger.info('Creating database tables')
         db.create_all()
         
-        # Create default user if not exists
-        if not User.query.filter_by(email='admin@akrun.com').first():
-            logger.info('Creating default admin user')
-            default_user = User(email='admin@akrun.com', password=generate_password_hash('admin123'))
-            db.session.add(default_user)
-            db.session.commit()
-            logger.info('Default admin user created')
-        else:
-            logger.info('Default admin user already exists')
+        # Check if user exists first before attempting to add
+        try:
+            existing_user = User.query.filter_by(email='admin@akrun.com').first()
+            if not existing_user:
+                logger.info('Creating default admin user')
+                default_user = User(email='admin@akrun.com', password=generate_password_hash('admin123'))
+                db.session.add(default_user)
+                db.session.commit()
+                logger.info('Default admin user created')
+            else:
+                logger.info('Default admin user already exists')
+        except Exception as e:
+            logger.exception(f'Error checking or creating user: {e}')
+            # Rollback the session to avoid transaction issues
+            db.session.rollback()
 except Exception as e:
     logger.exception(f'Error during database initialization: {e}')
+    logger.warning('Continuing application startup despite database error')
 
 # User loader for Flask-Login
 @login_manager.user_loader
@@ -135,47 +143,115 @@ def static_file():
         logger.exception(f'Error reading static file: {e}')
         return f'Error reading static file: {str(e)}'
 
+@app.route('/health')
+def health_check():
+    logger.info('Health check route accessed')
+    response_data = {
+        'status': 'ok',
+        'timestamp': str(datetime.datetime.now()),
+        'app_name': 'AKrun Analytics',
+        'python_version': sys.version,
+        'environment': os.environ.get('FLASK_ENV', 'unknown')
+    }
+    
+    # Convert to HTML
+    html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Health Check</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            h1 { color: green; }
+            table { border-collapse: collapse; width: 100%; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            tr:nth-child(even) { background-color: #f2f2f2; }
+        </style>
+    </head>
+    <body>
+        <h1>AKrun Analytics Health Check</h1>
+        <table>
+            <tr>
+                <th>Property</th>
+                <th>Value</th>
+            </tr>
+    """
+    
+    for key, value in response_data.items():
+        html += f"<tr><td>{key}</td><td>{value}</td></tr>"
+    
+    html += """
+        </table>
+    </body>
+    </html>
+    """
+    
+    return html
+
 @app.route('/debug')
 def debug_info():
     logger.info('Debug route accessed')
     
-    # Collect debug information
-    debug_data = {
-        'environment': dict(os.environ),
-        'sys.path': sys.path,
-        'current_dir': os.getcwd(),
-        'package_dir': package_dir,
-        'template_dir': templates_dir,
-        'template_dir_exists': os.path.exists(templates_dir),
-        'app_template_folder': app.template_folder,
-    }
-    
-    # Check if template directory exists and list contents
-    if os.path.exists(templates_dir):
-        debug_data['template_files'] = os.listdir(templates_dir)
-    
-    # Build HTML response
-    html = ['<!DOCTYPE html><html><head><title>Debug Info</title></head><body>']
-    html.append('<h1>AKrun Analytics Debug Info</h1>')
-    
-    # Add each debug section
-    for section, data in debug_data.items():
-        html.append(f'<h2>{section}</h2>')
-        if isinstance(data, dict):
-            html.append('<ul>')
-            for key, value in data.items():
-                html.append(f'<li><strong>{key}:</strong> {value}</li>')
-            html.append('</ul>')
-        elif isinstance(data, list):
-            html.append('<ul>')
-            for item in data:
-                html.append(f'<li>{item}</li>')
-            html.append('</ul>')
-        else:
-            html.append(f'<p>{data}</p>')
-    
-    html.append('</body></html>')
-    return '\n'.join(html)
+    try:
+        # Collect debug information
+        debug_data = {
+            'sys.path': sys.path,
+            'current_dir': os.getcwd(),
+            'package_dir': package_dir,
+            'template_dir': templates_dir,
+            'template_dir_exists': os.path.exists(templates_dir),
+            'app_template_folder': app.template_folder,
+        }
+        
+        # Get selected environment variables (avoid exposing all for security)
+        env_vars = {}
+        important_vars = ['PYTHONPATH', 'PATH', 'PWD', 'FLASK_APP', 'FLASK_ENV', 
+                         'DYNO', 'PORT', 'DATABASE_URL']
+        for var in important_vars:
+            env_vars[var] = os.environ.get(var, 'Not set')
+        debug_data['environment_selected'] = env_vars
+        
+        # Check if template directory exists and list contents
+        if os.path.exists(templates_dir):
+            try:
+                debug_data['template_files'] = os.listdir(templates_dir)
+            except Exception as e:
+                debug_data['template_files_error'] = str(e)
+        
+        # Build HTML response
+        html = ['<!DOCTYPE html><html><head><title>Debug Info</title><style>body { font-family: Arial; padding: 20px; }</style></head><body>']
+        html.append('<h1>AKrun Analytics Debug Info</h1>')
+        
+        # Add each debug section
+        for section, data in debug_data.items():
+            html.append(f'<h2>{section}</h2>')
+            if isinstance(data, dict):
+                html.append('<ul>')
+                for key, value in data.items():
+                    html.append(f'<li><strong>{key}:</strong> {value}</li>')
+                html.append('</ul>')
+            elif isinstance(data, list):
+                html.append('<ul>')
+                for item in data:
+                    html.append(f'<li>{item}</li>')
+                html.append('</ul>')
+            else:
+                html.append(f'<p>{data}</p>')
+        
+        html.append('</body></html>')
+        return '\n'.join(html)
+    except Exception as e:
+        logger.exception(f"Error in debug route: {e}")
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head><title>Debug Error</title></head>
+        <body>
+            <h1>Error in Debug Route</h1>
+            <p>An error occurred while gathering debug information: {str(e)}</p>
+        </body>
+        </html>
+        """
 
 # Add error handlers to log issues
 @app.errorhandler(404)
