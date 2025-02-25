@@ -4,3 +4,4 @@ include akrunanalytics/*.html
 include requirements.txt
 include runtime.txt
 include Procfile
+include static_test.html

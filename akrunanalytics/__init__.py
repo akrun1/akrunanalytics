@@ -177,6 +177,11 @@ def static_file():
         logger.exception(f'Error reading static file: {e}')
         return f'Error reading static file: {str(e)}'
 
+@app.route('/plaintext')
+def plaintext():
+    logger.info('Plaintext route accessed')
+    return 'This is a plain text response from the Flask app. It should always work.'
+
 @app.route('/health')
 def health_check():
     logger.info('Health check route accessed')
@@ -306,6 +311,38 @@ def debug_info():
         </body>
         </html>
         """
+
+@app.route('/static_test_file')
+def serve_static_test():
+    logger.info('Static test file route accessed')
+    try:
+        static_file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static_test.html')
+        logger.info(f'Static test file path: {static_file_path}')
+        logger.info(f'Static test file exists: {os.path.exists(static_file_path)}')
+        
+        if os.path.exists(static_file_path):
+            with open(static_file_path, 'r') as f:
+                content = f.read()
+            return content
+        else:
+            return f'''
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Static Test - Not Found</title>
+            </head>
+            <body>
+                <h1>Static Test File Not Found</h1>
+                <p>The static test file does not exist at: {static_file_path}</p>
+                <p>Current working directory: {os.getcwd()}</p>
+                <p>__file__: {__file__}</p>
+                <p>Parent directory: {os.path.dirname(os.path.dirname(__file__))}</p>
+            </body>
+            </html>
+            '''
+    except Exception as e:
+        logger.exception(f'Error serving static test file: {e}')
+        return f'Error serving static test file: {str(e)}'
 
 # Add error handlers to log issues
 @app.errorhandler(404)
