@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .metric-card {
+            @apply bg-white p-6 rounded-lg shadow-md;
+        }
+        .metric-value {
+            @apply text-3xl font-bold text-blue-600;
+        }
+        .metric-label {
+            @apply text-gray-600 text-sm;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Analytics Dashboard</h1>
+        
+        <!-- Metrics Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="metric-card">
+                <div class="metric-value" id="totalUsers">-</div>
+                <div class="metric-label">Total Users</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="activeUsers">-</div>
+                <div class="metric-label">Active Users</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="revenueGrowth">-</div>
+                <div class="metric-label">Revenue Growth</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Key Metrics Trend</h2>
+                <div id="metricsChart"></div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Predictions</h2>
+                <div id="predictionsChart"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch and display analytics data
+        const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://your-backend-url.herokuapp.com';
+
+        async function fetchAnalytics() {
+            const response = await fetch(`${API_BASE_URL}/api/analytics/summary`);
+            const data = await response.json();
+            
+            // Update metrics
+            document.getElementById('totalUsers').textContent = data.total_users.toLocaleString();
+            document.getElementById('activeUsers').textContent = data.active_users.toLocaleString();
+            document.getElementById('revenueGrowth').textContent = data.revenue_growth + '%';
+
+            // Create metrics chart
+            const metricsData = [{
+                type: 'bar',
+                x: Object.keys(data.key_metrics),
+                y: Object.values(data.key_metrics),
+                marker: {
+                    color: ['#3B82F6', '#10B981', '#6366F1']
+                }
+            }];
+
+            Plotly.newPlot('metricsChart', metricsData, {
+                margin: { t: 20 },
+                height: 300
+            });
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAnalytics();
+            setInterval(fetchAnalytics, 300000); // Refresh every 5 minutes
+        });
+    </script>
+</body>
+</html>
