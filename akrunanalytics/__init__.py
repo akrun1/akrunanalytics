@@ -91,9 +91,11 @@ try:
         # For PostgreSQL, we need to drop and recreate the users table due to password column size change
         if db.engine.url.get_dialect().name == 'postgresql' and 'users' in tables:
             logger.info('Dropping users table to update schema')
-            # Use direct SQL to drop the table
+            # Use direct SQL to drop the table and its sequence
             with db.engine.connect() as conn:
                 conn.execute(db.text('DROP TABLE IF EXISTS "users" CASCADE'))
+                # Also drop the sequence that's used for the id field
+                conn.execute(db.text('DROP SEQUENCE IF EXISTS users_id_seq'))
                 conn.commit()
             logger.info('Users table dropped')
             # Remove 'users' from tables list so we create it next
