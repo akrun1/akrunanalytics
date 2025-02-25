@@ -2,7 +2,7 @@ import os
 import sys
 import logging
 from flask import Flask, render_template, send_from_directory, request
-from flask_login import LoginManager
+from flask_login import LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
 import datetime
@@ -71,7 +71,9 @@ login_manager.init_app(app)
 logger.info('Login manager initialized')
 
 # Model
-class User(db.Model):
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'  # Use a non-reserved keyword for the table name
+    
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
@@ -86,8 +88,8 @@ try:
         tables = inspector.get_table_names()
         logger.info(f'Existing tables: {tables}')
         
-        if 'user' not in tables:
-            logger.info('Creating user table')
+        if 'users' not in tables:
+            logger.info('Creating users table')
             db.create_all()
         else:
             logger.info('Tables already exist, skipping creation')
@@ -97,7 +99,11 @@ try:
             # Use direct engine connection to check if user exists
             user_exists = False
             with db.engine.connect() as conn:
-                result = conn.execute(db.text("SELECT COUNT(*) FROM user WHERE email = 'admin@akrun.com'"))
+                # In PostgreSQL, 'user' is a reserved keyword and needs to be quoted
+                if db.engine.url.get_dialect().name == 'postgresql':
+                    result = conn.execute(db.text('SELECT COUNT(*) FROM "users" WHERE email = :email'), {"email": "admin@akrun.com"})
+                else:
+                    result = conn.execute(db.text("SELECT COUNT(*) FROM users WHERE email = :email"), {"email": "admin@akrun.com"})
                 count = result.scalar()
                 user_exists = count > 0
                 logger.info(f'Admin user exists check: {user_exists}')
@@ -107,10 +113,16 @@ try:
                 # Use direct SQL to insert user to avoid SQLAlchemy object conflicts
                 with db.engine.connect() as conn:
                     hashed_password = generate_password_hash('admin123')
-                    conn.execute(
-                        db.text("INSERT INTO user (email, password) VALUES (:email, :password)"),
-                        {"email": "admin@akrun.com", "password": hashed_password}
-                    )
+                    if db.engine.url.get_dialect().name == 'postgresql':
+                        conn.execute(
+                            db.text('INSERT INTO "users" (email, password) VALUES (:email, :password)'),
+                            {"email": "admin@akrun.com", "password": hashed_password}
+                        )
+                    else:
+                        conn.execute(
+                            db.text("INSERT INTO users (email, password) VALUES (:email, :password)"),
+                            {"email": "admin@akrun.com", "password": hashed_password}
+                        )
                     conn.commit()
                     logger.info('Default admin user created via direct SQL')
             else:
