@@ -397,12 +397,20 @@ def serve_static_test():
 # Add error handlers to log issues
 @app.errorhandler(404)
 def page_not_found(e):
-    logger.error(f'404 error: {request.path}')
-    return 'Page not found', 404
+    logger.error(f"404 error: {request.path}")
+    return render_template('404.html'), 404
 
 @app.errorhandler(500)
 def server_error(e):
-    logger.error(f'500 error: {str(e)}')
-    return 'Server error', 500
+    logger.error(f"500 error: {str(e)}")
+    return render_template('500.html'), 500
+
+# Add a catch-all error handler
+@app.errorhandler(Exception)
+def handle_exception(e):
+    # Log the exception details
+    logger.error(f"Unhandled exception: {str(e)}", exc_info=True)
+    # Return a generic error page
+    return render_template('500.html'), 500
 
 logger.info('AKrun Analytics app initialization complete')
