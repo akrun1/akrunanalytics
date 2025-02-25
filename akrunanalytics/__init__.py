@@ -1,7 +1,7 @@
 import os
 import sys
 import logging
-from flask import Flask, render_template, request
+from flask import Flask, render_template, send_from_directory, request
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
@@ -66,8 +66,17 @@ class User(db.Model):
 # Create database and default user
 try:
     with app.app_context():
-        logger.info('Creating database tables')
-        db.create_all()
+        logger.info('Creating database tables if they do not exist')
+        # Check if tables exist before creating them
+        inspector = db.inspect(db.engine)
+        tables = inspector.get_table_names()
+        logger.info(f'Existing tables: {tables}')
+        
+        if 'user' not in tables:
+            logger.info('Creating user table')
+            db.create_all()
+        else:
+            logger.info('Tables already exist, skipping creation')
         
         # Check if user exists first before attempting to add
         try:
@@ -98,13 +107,38 @@ def load_user(user_id):
 def home():
     logger.info('Home route accessed')
     try:
-        logger.debug(f'Attempting to render template: index.html')
-        response = render_template('index.html')
-        logger.debug('Template rendered successfully')
-        return response
+        logger.info('Attempting to render index.html template')
+        logger.debug(f'Template folder is: {app.template_folder}')
+        logger.debug(f'Index template exists: {os.path.exists(os.path.join(app.template_folder, "index.html"))}')
+        
+        # List all templates for debugging
+        template_path = os.path.join(app.template_folder, "index.html")
+        logger.info(f'Absolute template path: {template_path}')
+        
+        return render_template('index.html')
     except Exception as e:
         logger.exception(f'Error rendering index.html: {e}')
-        return f'Error rendering template: {str(e)}'
+        # Return a simple HTML page if template rendering fails
+        return f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>AKrun Analytics - Error</title>
+            <style>
+                body {{ font-family: Arial, sans-serif; padding: 20px; }}
+                h1 {{ color: #d9534f; }}
+                pre {{ background-color: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; }}
+            </style>
+        </head>
+        <body>
+            <h1>Template Rendering Error</h1>
+            <p>There was an error rendering the index.html template. Please check the logs for more details.</p>
+            <pre>{str(e)}</pre>
+            <p>Template folder: {app.template_folder}</p>
+            <p>Template exists: {os.path.exists(os.path.join(app.template_folder, "index.html"))}</p>
+        </body>
+        </html>
+        '''
 
 @app.route('/test')
 def test():
@@ -151,8 +185,25 @@ def health_check():
         'timestamp': str(datetime.datetime.now()),
         'app_name': 'AKrun Analytics',
         'python_version': sys.version,
-        'environment': os.environ.get('FLASK_ENV', 'unknown')
+        'environment': os.environ.get('FLASK_ENV', 'unknown'),
+        'workers': os.environ.get('WEB_CONCURRENCY', 'unknown'),
+        'dyno': os.environ.get('DYNO', 'unknown'),
+        'request_id': request.headers.get('X-Request-ID', 'unknown'),
+        'host': request.host,
+        'path': request.path,
+        'url': request.url,
+        'method': request.method,
+        'user_agent': request.headers.get('User-Agent', 'unknown'),
+        'template_folder': app.template_folder,
+        'template_folder_exists': os.path.exists(app.template_folder),
+        'template_files': os.listdir(app.template_folder) if os.path.exists(app.template_folder) else [],
     }
+    
+    # Add available template engines
+    try:
+        response_data['template_engines'] = str(app.jinja_env.list_templates())
+    except Exception as e:
+        response_data['template_engines_error'] = str(e)
     
     # Convert to HTML
     html = """
@@ -178,7 +229,10 @@ def health_check():
     """
     
     for key, value in response_data.items():
-        html += f"<tr><td>{key}</td><td>{value}</td></tr>"
+        if isinstance(value, list):
+            html += f"<tr><td>{key}</td><td>{', '.join(value)}</td></tr>"
+        else:
+            html += f"<tr><td>{key}</td><td>{value}</td></tr>"
     
     html += """
         </table>
