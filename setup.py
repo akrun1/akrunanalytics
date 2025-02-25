@@ -6,19 +6,12 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     package_data={
-        'akrunanalytics': [
-            'templates/*',
-            'static/*',
-        ],
+        'akrunanalytics': ['templates/*'],
     },
     install_requires=[
-        'flask',
-        'flask-cors',
-        'flask-login',
-        'flask-sqlalchemy',
-        'gunicorn',
-        'python-dotenv',
-        'plotly',
+        'flask>=3.0.0',
+        'gunicorn>=21.2.0',
+    ],
         'dash',
         'pandas',
         'numpy',
