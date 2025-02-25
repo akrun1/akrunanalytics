@@ -42,7 +42,21 @@ except Exception as e:
 
 # Configuration
 app.config['SECRET_KEY'] = 'your-secret-key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+
+# Set up database
+if os.environ.get('DATABASE_URL'):
+    # Use PostgreSQL on Heroku
+    postgresql_url = os.environ.get('DATABASE_URL')
+    # Heroku's DATABASE_URL starts with postgres://, but SQLAlchemy requires postgresql://
+    if postgresql_url.startswith('postgres://'):
+        postgresql_url = postgresql_url.replace('postgres://', 'postgresql://', 1)
+    logger.info(f'Using PostgreSQL database from environment variable')
+    app.config['SQLALCHEMY_DATABASE_URI'] = postgresql_url
+else:
+    # Use SQLite locally
+    logger.info('Using SQLite database')
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 logger.info('Flask app configured')
 

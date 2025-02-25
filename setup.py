@@ -14,6 +14,7 @@ setup(
         'flask-login>=0.6.2',
         'flask-sqlalchemy>=3.0.0',
         'werkzeug>=3.0.0',
+        'psycopg2>=2.9.9',
     ],
     python_requires='>=3.11',
 )
