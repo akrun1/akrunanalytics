@@ -78,21 +78,32 @@ try:
         else:
             logger.info('Tables already exist, skipping creation')
         
-        # Check if user exists first before attempting to add
+        # Check if user exists - use raw SQL to avoid SQLAlchemy object conflicts
         try:
-            existing_user = User.query.filter_by(email='admin@akrun.com').first()
-            if not existing_user:
+            # Use direct engine connection to check if user exists
+            user_exists = False
+            with db.engine.connect() as conn:
+                result = conn.execute(db.text("SELECT COUNT(*) FROM user WHERE email = 'admin@akrun.com'"))
+                count = result.scalar()
+                user_exists = count > 0
+                logger.info(f'Admin user exists check: {user_exists}')
+            
+            if not user_exists:
                 logger.info('Creating default admin user')
-                default_user = User(email='admin@akrun.com', password=generate_password_hash('admin123'))
-                db.session.add(default_user)
-                db.session.commit()
-                logger.info('Default admin user created')
+                # Use direct SQL to insert user to avoid SQLAlchemy object conflicts
+                with db.engine.connect() as conn:
+                    hashed_password = generate_password_hash('admin123')
+                    conn.execute(
+                        db.text("INSERT INTO user (email, password) VALUES (:email, :password)"),
+                        {"email": "admin@akrun.com", "password": hashed_password}
+                    )
+                    conn.commit()
+                    logger.info('Default admin user created via direct SQL')
             else:
-                logger.info('Default admin user already exists')
+                logger.info('Default admin user already exists, skipping creation')
         except Exception as e:
             logger.exception(f'Error checking or creating user: {e}')
-            # Rollback the session to avoid transaction issues
-            db.session.rollback()
+            # Continue despite user creation error
 except Exception as e:
     logger.exception(f'Error during database initialization: {e}')
     logger.warning('Continuing application startup despite database error')
