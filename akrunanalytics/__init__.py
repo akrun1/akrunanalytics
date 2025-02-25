@@ -54,17 +54,33 @@ load_dotenv()
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default-secret-key')
 
 # Configure database
-database_url = os.getenv('DATABASE_URL')
-if database_url:
-    # Heroku provides DATABASE_URL, but we need to modify it for SQLAlchemy
-    if database_url.startswith('postgres://'):
-        database_url = database_url.replace('postgres://', 'postgresql://', 1)
-    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-else:
-    # Local development uses SQLite
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///analytics.db'
+try:
+    database_url = os.getenv('DATABASE_URL')
+    if database_url:
+        # Heroku provides DATABASE_URL, but we need to modify it for SQLAlchemy
+        if database_url.startswith('postgres://'):
+            database_url = database_url.replace('postgres://', 'postgresql://', 1)
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+        app.logger.info(f'Using database URL: {database_url}')
+    else:
+        # Local development uses SQLite
+        sqlite_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'analytics.db')
+        app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{sqlite_path}'
+        app.logger.info(f'Using SQLite database at: {sqlite_path}')
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # Additional database configuration
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'pool_size': 5,
+        'max_overflow': 2,
+        'pool_timeout': 30,
+        'pool_recycle': 1800,
+    }
+except Exception as e:
+    app.logger.error(f'Error configuring database: {str(e)}')
+    # Set a fallback SQLite database
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app.logger.info('Using fallback in-memory SQLite database')
 
 # Initialize extensions
 db = SQLAlchemy(app)
@@ -72,22 +88,44 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# Initialize database
-try:
-    with app.app_context():
+def init_db():
+    """Initialize the database and create default user"""
+    try:
         # Create tables
         db.create_all()
+        app.logger.info('Database tables created successfully')
         
-        # Add default user if not exists
-        if not User.query.filter_by(email='admin@akrun.com').first():
-            default_user = User(email='admin@akrun.com',
-                              password=generate_password_hash('admin123'))
+        # Check if default user exists
+        user = User.query.filter_by(email='admin@akrun.com').first()
+        if not user:
+            # Create default user
+            default_user = User(
+                email='admin@akrun.com',
+                password=generate_password_hash('admin123', method='scrypt')
+            )
             db.session.add(default_user)
             db.session.commit()
             app.logger.info('Created default admin user')
+        else:
+            app.logger.info('Default admin user already exists')
+            
+    except Exception as e:
+        app.logger.error(f'Database initialization error: {str(e)}')
+        db.session.rollback()
+        raise
+
+# Initialize database
+try:
+    with app.app_context():
+        # Try to query the database to check connection
+        db.engine.execute('SELECT 1')
+        app.logger.info('Database connection successful')
+        
+        # Initialize database
+        init_db()
 except Exception as e:
-    app.logger.error(f'Database initialization error: {str(e)}')
-    # Don't raise the exception - let the app continue without DB if necessary
+    app.logger.error(f'Could not initialize database: {str(e)}')
+    # Don't raise the exception - let the app continue without DB
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
