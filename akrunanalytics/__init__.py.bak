@@ -1,0 +1,48 @@
+from flask import Flask, render_template
+import os
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s %(levelname)s: %(message)s'
+)
+
+# Get the absolute path to the package directory
+package_dir = os.path.abspath(os.path.dirname(__file__))
+
+# Create Flask app with explicit template and static folders
+app = Flask(__name__,
+           template_folder=os.path.join(package_dir, 'templates'),
+           static_folder=os.path.join(package_dir, 'static'))
+CORS(app)
+
+# Print package directory and list all files for debugging
+app.logger.debug(f'Package directory: {package_dir}')
+
+# List all files in the package directory
+def list_files(startpath):
+    for root, dirs, files in os.walk(startpath):
+        level = root.replace(startpath, '').count(os.sep)
+        indent = ' ' * 4 * level
+        app.logger.debug(f'{indent}Directory: {os.path.basename(root)}/')
+        subindent = ' ' * 4 * (level + 1)
+        for f in files:
+            app.logger.debug(f'{subindent}File: {f}')
+
+app.logger.debug('Listing all files in package directory:')
+list_files(package_dir)
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.DEBUG)
+
+# Print current working directory and template folder location
+app.logger.debug(f'Current working directory: {os.getcwd()}')
+app.logger.debug(f'Template folder location: {app.template_folder}')
+app.logger.debug(f'Static folder location: {app.static_folder}')
+
+# Enable debugging
+app.config['DEBUG'] = True
+app.config['TEMPLATES_AUTO_RELOAD'] = True
