@@ -8,8 +8,11 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 import os
 
-app = Flask(__name__, static_folder='public', static_url_path='')
+app = Flask(__name__)
 CORS(app)
+
+# Enable debugging in development
+app.config['DEBUG'] = True
 
 # Configure SQLAlchemy and Login Manager
 import os
@@ -27,13 +30,15 @@ login_manager.init_app(app)
 
 @app.route('/')
 def home():
-    return send_from_directory('public', 'index.html')
+    return render_template('index.html')
 
-@app.route('/<path:path>')
-def serve_static(path):
-    if os.path.exists(os.path.join('public', path)):
-        return send_from_directory('public', path)
-    return send_from_directory('public', 'index.html')
+@app.route('/founder')
+def founder():
+    return render_template('founder.html')
+
+@app.route('/snake-game')
+def snake_game():
+    return render_template('snake-game.html')
 
 @app.route('/game')
 def game():
