@@ -52,14 +52,42 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default-secret-key')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///analytics.db')
-if app.config['SQLALCHEMY_DATABASE_URI'].startswith('postgres://'):
-    app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace('postgres://', 'postgresql://', 1)
 
+# Configure database
+database_url = os.getenv('DATABASE_URL')
+if database_url:
+    # Heroku provides DATABASE_URL, but we need to modify it for SQLAlchemy
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+else:
+    # Local development uses SQLite
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///analytics.db'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize extensions
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+# Initialize database
+try:
+    with app.app_context():
+        # Create tables
+        db.create_all()
+        
+        # Add default user if not exists
+        if not User.query.filter_by(email='admin@akrun.com').first():
+            default_user = User(email='admin@akrun.com',
+                              password=generate_password_hash('admin123'))
+            db.session.add(default_user)
+            db.session.commit()
+            app.logger.info('Created default admin user')
+except Exception as e:
+    app.logger.error(f'Database initialization error: {str(e)}')
+    # Don't raise the exception - let the app continue without DB if necessary
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -84,25 +112,11 @@ with app.app_context():
 def home():
     app.logger.info('Accessing home route')
     try:
-        app.logger.debug(f'Current working directory: {os.getcwd()}')
-        app.logger.debug(f'Template folder: {current_app.template_folder}')
-        app.logger.debug(f'Static folder: {current_app.static_folder}')
-        template_list = os.listdir(current_app.template_folder)
-        app.logger.debug(f'Available templates: {template_list}')
-        
-        template_path = os.path.join(current_app.template_folder, 'index.html')
-        app.logger.debug(f'Full template path: {template_path}')
-        app.logger.debug(f'Template exists: {os.path.exists(template_path)}')
-        
-        if os.path.exists(template_path):
-            with open(template_path, 'r') as f:
-                app.logger.debug(f'Template content preview: {f.read()[:200]}')
-        
+        # Basic template rendering without database access
         return render_template('index.html')
     except Exception as e:
         app.logger.error(f'Error rendering home page: {str(e)}')
-        app.logger.exception('Full traceback:')
-        return f'Error: {str(e)}', 500
+        return 'Welcome to AKrun Analytics! Our site is currently under maintenance.', 503
 
 @app.route('/founder')
 def founder():
@@ -114,17 +128,25 @@ def snake_game():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        user = User.query.filter_by(email=email).first()
+    try:
+        if request.method == 'POST':
+            email = request.form.get('email')
+            password = request.form.get('password')
+            
+            try:
+                user = User.query.filter_by(email=email).first()
+                if user and check_password_hash(user.password, password):
+                    login_user(user)
+                    return redirect(url_for('dashboard'))
+                return 'Invalid credentials'
+            except Exception as db_error:
+                app.logger.error(f'Database error during login: {str(db_error)}')
+                return 'Login service temporarily unavailable', 503
         
-        if user and check_password_hash(user.password, password):
-            login_user(user)
-            return redirect(url_for('dashboard'))
-        return 'Invalid credentials'
-    
-    return render_template('login.html')
+        return render_template('login.html')
+    except Exception as e:
+        app.logger.error(f'Error in login route: {str(e)}')
+        return 'Login page temporarily unavailable', 503
 
 @app.route('/logout')
 @login_required
@@ -135,7 +157,11 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    try:
+        return render_template('dashboard.html')
+    except Exception as e:
+        app.logger.error(f'Error accessing dashboard: {str(e)}')
+        return 'Dashboard temporarily unavailable', 503
 
 @app.route('/api/analytics/summary')
 @login_required
