@@ -1,1 +1,1 @@
-web: gunicorn akrunanalytics:app --log-level debug --access-logfile - --error-logfile - --workers 1 --timeout 120
+web: gunicorn akrunanalytics:app --bind 0.0.0.0:$PORT --log-level debug --access-logfile - --error-logfile -
