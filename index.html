@@ -35,7 +35,7 @@
             flex: 1;
             max-width: 1000px;
         }
-        .news-sidebar {
+        .sidebar {
             width: 300px;
             position: sticky;
             top: 100px;
@@ -46,6 +46,28 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             max-height: 80vh;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .game-link {
+            display: block;
+            text-decoration: none;
+            color: #4CAF50;
+            padding: 15px 20px;
+            background: #1E1E1E;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1.1em;
+            display: block;
+            margin: 10px 0 20px 0;
+            border: 2px solid #4CAF50;
+        }
+        .game-link:hover {
+            background: #4CAF50;
+            color: #1E1E1E;
         }
         nav {
             width: 100%;
@@ -187,7 +209,19 @@
             color: #666;
             font-size: 0.8em;
         }
-        .news-sidebar h3 {
+        .sidebar h3 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        .game-section {
+            margin-bottom: 30px;
+        }
+        .game-section h3 {
+            color: #4CAF50;
+        }
+        .news-section h3 {
             color: #0066cc;
             margin-bottom: 15px;
             font-size: 1.2em;
@@ -201,7 +235,7 @@
             .container {
                 max-width: 100%;
             }
-            .news-sidebar {
+            .sidebar {
                 display: none;
             }
         }
@@ -268,10 +302,16 @@
             </section>
         </div>
 
-        <div class="news-sidebar">
-            <h3>Tech & Finance Updates</h3>
-            <div id="news-container">
-                <!-- News items will be populated here -->
+        <div class="sidebar">
+            <div class="game-section">
+                <h3>Take a Break!</h3>
+                <a href="snake-game.html" class="game-link">🎮 Play Snake Game</a>
+            </div>
+            <div class="news-section">
+                <h3>Tech & Finance Updates</h3>
+                <div id="news-container">
+                    <!-- News items will be populated here -->
+                </div>
             </div>
         </div>
     </div>
