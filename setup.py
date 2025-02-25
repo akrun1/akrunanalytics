@@ -12,11 +12,5 @@ setup(
         'flask>=3.0.0',
         'gunicorn>=21.2.0',
     ],
-        'dash',
-        'pandas',
-        'numpy',
-        'scikit-learn',
-        'psycopg2-binary',
-    ],
     python_requires='>=3.11',
 )
