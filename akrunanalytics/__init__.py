@@ -135,6 +135,48 @@ def static_file():
         logger.exception(f'Error reading static file: {e}')
         return f'Error reading static file: {str(e)}'
 
+@app.route('/debug')
+def debug_info():
+    logger.info('Debug route accessed')
+    
+    # Collect debug information
+    debug_data = {
+        'environment': dict(os.environ),
+        'sys.path': sys.path,
+        'current_dir': os.getcwd(),
+        'package_dir': package_dir,
+        'template_dir': templates_dir,
+        'template_dir_exists': os.path.exists(templates_dir),
+        'app_template_folder': app.template_folder,
+    }
+    
+    # Check if template directory exists and list contents
+    if os.path.exists(templates_dir):
+        debug_data['template_files'] = os.listdir(templates_dir)
+    
+    # Build HTML response
+    html = ['<!DOCTYPE html><html><head><title>Debug Info</title></head><body>']
+    html.append('<h1>AKrun Analytics Debug Info</h1>')
+    
+    # Add each debug section
+    for section, data in debug_data.items():
+        html.append(f'<h2>{section}</h2>')
+        if isinstance(data, dict):
+            html.append('<ul>')
+            for key, value in data.items():
+                html.append(f'<li><strong>{key}:</strong> {value}</li>')
+            html.append('</ul>')
+        elif isinstance(data, list):
+            html.append('<ul>')
+            for item in data:
+                html.append(f'<li>{item}</li>')
+            html.append('</ul>')
+        else:
+            html.append(f'<p>{data}</p>')
+    
+    html.append('</body></html>')
+    return '\n'.join(html)
+
 # Add error handlers to log issues
 @app.errorhandler(404)
 def page_not_found(e):
