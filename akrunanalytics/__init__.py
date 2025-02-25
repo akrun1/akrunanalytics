@@ -1,11 +1,12 @@
-from flask import Flask, render_template, jsonify, request, current_app, redirect, url_for, flash
-from flask_cors import CORS
-from flask_login import LoginManager, login_required, UserMixin, login_user, logout_user
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
-import logging
-import sys
+from flask import Flask, render_template
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s %(levelname)s: %(message)s'
+)
 
 # Get the absolute path to the package directory
 package_dir = os.path.abspath(os.path.dirname(__file__))
@@ -146,26 +147,19 @@ with app.app_context():
         db.session.commit()
 
 # Remove login_required from home route
-@app.route('/test')
-def test():
-    """Simple test route that doesn't use templates or database"""
-    app.logger.info('Test route accessed')
-    return 'AKrun Analytics API is running!'
-
 @app.route('/')
 def home():
-    app.logger.info('Accessing home route')
     try:
-        # Log template folder information
-        app.logger.info(f'Template folder: {app.template_folder}')
+        app.logger.info('Accessing home route')
         app.logger.info(f'Available templates: {os.listdir(app.template_folder)}')
-        
-        # Basic template rendering without database access
         return render_template('index.html')
     except Exception as e:
-        app.logger.error(f'Error rendering home page: {str(e)}')
-        app.logger.exception('Full traceback:')
-        return 'Welcome to AKrun Analytics! Our site is currently under maintenance.', 503
+        app.logger.error(f'Error in home route: {str(e)}')
+        return str(e), 500
+
+@app.route('/test')
+def test():
+    return 'Hello from AKrun Analytics!'
 
 @app.route('/founder')
 def founder():
