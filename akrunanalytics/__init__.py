@@ -83,66 +83,88 @@ class User(UserMixin, db.Model):
 try:
     with app.app_context():
         logger.info('Creating database tables if they do not exist')
-        # Check if tables exist before creating them
-        inspector = db.inspect(db.engine)
-        tables = inspector.get_table_names()
-        logger.info(f'Existing tables: {tables}')
         
-        # For PostgreSQL, we need to drop and recreate the users table due to password column size change
-        if db.engine.url.get_dialect().name == 'postgresql' and 'users' in tables:
-            logger.info('Dropping users table to update schema')
-            # Use direct SQL to drop the table and its sequence
-            with db.engine.connect() as conn:
-                conn.execute(db.text('DROP TABLE IF EXISTS "users" CASCADE'))
-                # Also drop the sequence that's used for the id field
-                conn.execute(db.text('DROP SEQUENCE IF EXISTS users_id_seq'))
-                conn.commit()
-            logger.info('Users table dropped')
-            # Remove 'users' from tables list so we create it next
-            tables = [t for t in tables if t != 'users']
-        
-        if 'users' not in tables:
-            logger.info('Creating users table')
-            db.create_all()
-        else:
-            logger.info('Tables already exist, skipping creation')
-        
-        # Check if user exists - use raw SQL to avoid SQLAlchemy object conflicts
-        try:
-            # Use direct engine connection to check if user exists
-            user_exists = False
-            with db.engine.connect() as conn:
-                # In PostgreSQL, 'user' is a reserved keyword and needs to be quoted
-                if db.engine.url.get_dialect().name == 'postgresql':
-                    result = conn.execute(db.text('SELECT COUNT(*) FROM "users" WHERE email = :email'), {"email": "admin@akrun.com"})
-                else:
-                    result = conn.execute(db.text("SELECT COUNT(*) FROM users WHERE email = :email"), {"email": "admin@akrun.com"})
-                count = result.scalar()
-                user_exists = count > 0
-                logger.info(f'Admin user exists check: {user_exists}')
+        # For PostgreSQL, we'll take a different approach - alter the table instead of recreating it
+        if db.engine.url.get_dialect().name == 'postgresql':
+            inspector = db.inspect(db.engine)
+            tables = inspector.get_table_names()
+            logger.info(f'Existing tables: {tables}')
             
-            if not user_exists:
-                logger.info('Creating default admin user')
-                # Use direct SQL to insert user to avoid SQLAlchemy object conflicts
-                with db.engine.connect() as conn:
-                    hashed_password = generate_password_hash('admin123')
-                    if db.engine.url.get_dialect().name == 'postgresql':
+            with db.engine.connect() as conn:
+                # First check if we need to create the users table
+                if 'users' not in tables:
+                    logger.info('Creating users table')
+                    try:
+                        db.create_all()
+                    except Exception as e:
+                        logger.error(f"Error creating tables: {e}")
+                else:
+                    # If table exists, check and alter password column if needed
+                    try:
+                        columns = inspector.get_columns('users')
+                        password_col = next((col for col in columns if col['name'] == 'password'), None)
+                        
+                        if password_col and password_col.get('type').length < 255:
+                            logger.info('Altering password column to increase length')
+                            conn.execute(db.text('ALTER TABLE "users" ALTER COLUMN "password" TYPE VARCHAR(255)'))
+                            conn.commit()
+                            logger.info('Password column altered successfully')
+                    except Exception as e:
+                        logger.error(f"Error altering password column: {e}")
+                
+                # Check if user exists - use raw SQL to avoid SQLAlchemy object conflicts
+                try:
+                    # Use direct engine connection to check if user exists
+                    user_exists = False
+                    result = conn.execute(db.text('SELECT COUNT(*) FROM "users" WHERE email = :email'), {"email": "admin@akrun.com"})
+                    count = result.scalar()
+                    user_exists = count > 0
+                    logger.info(f'Admin user exists check: {user_exists}')
+                    
+                    if not user_exists:
+                        logger.info('Creating default admin user')
+                        # Use direct SQL to insert user to avoid SQLAlchemy object conflicts
+                        hashed_password = generate_password_hash('admin123')
                         conn.execute(
                             db.text('INSERT INTO "users" (email, password) VALUES (:email, :password)'),
                             {"email": "admin@akrun.com", "password": hashed_password}
                         )
+                        conn.commit()
+                        logger.info('Default admin user created via direct SQL')
                     else:
-                        conn.execute(
-                            db.text("INSERT INTO users (email, password) VALUES (:email, :password)"),
-                            {"email": "admin@akrun.com", "password": hashed_password}
-                        )
+                        logger.info('Default admin user already exists, skipping creation')
+                except Exception as e:
+                    logger.exception(f'Error checking or creating user: {e}')
+        else:
+            # For SQLite or other databases, use the normal approach
+            inspector = db.inspect(db.engine)
+            tables = inspector.get_table_names()
+            logger.info(f'Existing tables: {tables}')
+            
+            if 'users' not in tables:
+                logger.info('Creating users table')
+                db.create_all()
+            else:
+                logger.info('Tables already exist, skipping creation')
+            
+            # Check if user exists
+            with db.engine.connect() as conn:
+                user_exists = False
+                result = conn.execute(db.text("SELECT COUNT(*) FROM users WHERE email = :email"), {"email": "admin@akrun.com"})
+                count = result.scalar()
+                user_exists = count > 0
+                
+                if not user_exists:
+                    logger.info('Creating default admin user')
+                    hashed_password = generate_password_hash('admin123')
+                    conn.execute(
+                        db.text("INSERT INTO users (email, password) VALUES (:email, :password)"),
+                        {"email": "admin@akrun.com", "password": hashed_password}
+                    )
                     conn.commit()
                     logger.info('Default admin user created via direct SQL')
-            else:
-                logger.info('Default admin user already exists, skipping creation')
-        except Exception as e:
-            logger.exception(f'Error checking or creating user: {e}')
-            # Continue despite user creation error
+                else:
+                    logger.info('Default admin user already exists, skipping creation')
 except Exception as e:
     logger.exception(f'Error during database initialization: {e}')
     logger.warning('Continuing application startup despite database error')
