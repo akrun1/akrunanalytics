@@ -7,12 +7,27 @@ import logging
 import sys
 import os
 
-app = Flask(__name__)
+# Get the absolute path to the package directory
+package_dir = os.path.abspath(os.path.dirname(__file__))
+
+# Create Flask app with explicit template and static folders
+app = Flask(__name__,
+           template_folder=os.path.join(package_dir, 'templates'),
+           static_folder=os.path.join(package_dir, 'static'))
 CORS(app)
 
+# Print package directory for debugging
+app.logger.debug(f'Package directory: {package_dir}')
+
 # Configure logging
+logging.basicConfig(level=logging.DEBUG)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.DEBUG)
+
+# Print current working directory and template folder location
+app.logger.debug(f'Current working directory: {os.getcwd()}')
+app.logger.debug(f'Template folder location: {app.template_folder}')
+app.logger.debug(f'Static folder location: {app.static_folder}')
 
 # Enable debugging
 app.config['DEBUG'] = True
@@ -56,11 +71,24 @@ with app.app_context():
 def home():
     app.logger.info('Accessing home route')
     try:
+        app.logger.debug(f'Current working directory: {os.getcwd()}')
         app.logger.debug(f'Template folder: {current_app.template_folder}')
-        app.logger.debug(f'Available templates: {os.listdir(current_app.template_folder)}')
+        app.logger.debug(f'Static folder: {current_app.static_folder}')
+        template_list = os.listdir(current_app.template_folder)
+        app.logger.debug(f'Available templates: {template_list}')
+        
+        template_path = os.path.join(current_app.template_folder, 'index.html')
+        app.logger.debug(f'Full template path: {template_path}')
+        app.logger.debug(f'Template exists: {os.path.exists(template_path)}')
+        
+        if os.path.exists(template_path):
+            with open(template_path, 'r') as f:
+                app.logger.debug(f'Template content preview: {f.read()[:200]}')
+        
         return render_template('index.html')
     except Exception as e:
         app.logger.error(f'Error rendering home page: {str(e)}')
+        app.logger.exception('Full traceback:')
         return f'Error: {str(e)}', 500
 
 @app.route('/founder')
