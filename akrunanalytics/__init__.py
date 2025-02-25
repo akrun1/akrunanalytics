@@ -91,6 +91,16 @@ try:
             logger.info(f'Existing tables: {tables}')
             
             with db.engine.connect() as conn:
+                # Drop the old 'user' table if it exists (we're now using 'users')
+                if 'user' in tables:
+                    logger.info("Found old 'user' table, dropping it to avoid confusion")
+                    try:
+                        conn.execute(db.text('DROP TABLE IF EXISTS "user" CASCADE'))
+                        conn.commit()
+                        logger.info("Successfully dropped old 'user' table")
+                    except Exception as e:
+                        logger.error(f"Error dropping old 'user' table: {e}")
+                
                 # First check if we need to create the users table
                 if 'users' not in tables:
                     logger.info('Creating users table')
