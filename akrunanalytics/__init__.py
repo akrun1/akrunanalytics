@@ -16,8 +16,21 @@ app = Flask(__name__,
            static_folder=os.path.join(package_dir, 'static'))
 CORS(app)
 
-# Print package directory for debugging
+# Print package directory and list all files for debugging
 app.logger.debug(f'Package directory: {package_dir}')
+
+# List all files in the package directory
+def list_files(startpath):
+    for root, dirs, files in os.walk(startpath):
+        level = root.replace(startpath, '').count(os.sep)
+        indent = ' ' * 4 * level
+        app.logger.debug(f'{indent}Directory: {os.path.basename(root)}/')
+        subindent = ' ' * 4 * (level + 1)
+        for f in files:
+            app.logger.debug(f'{subindent}File: {f}')
+
+app.logger.debug('Listing all files in package directory:')
+list_files(package_dir)
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
