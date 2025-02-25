@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AKrun Analytics - Test Page</title>
+    <!-- Debug info -->
+    <script>
+        console.log('Template loaded successfully');
+    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -252,6 +256,13 @@
 <body>
     <h1>Welcome to AKrun Analytics</h1>
     <p>This is a test page to verify Flask template rendering.</p>
+    <div style="margin: 20px; padding: 10px; background-color: #f0f0f0;">
+        <h3>Debug Information:</h3>
+        <p>Template rendered at: <span id="timestamp"></span></p>
+        <script>
+            document.getElementById('timestamp').textContent = new Date().toISOString();
+        </script>
+    </div>
     <nav>
         <ul>
             <li><a href="/">Home</a></li>

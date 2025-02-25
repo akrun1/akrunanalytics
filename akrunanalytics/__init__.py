@@ -91,23 +91,22 @@ login_manager.login_view = 'login'
 def init_db():
     """Initialize the database and create default user"""
     try:
-        # Create tables
+        # Drop all tables first to handle schema changes
+        db.drop_all()
+        app.logger.info('Dropped existing tables')
+        
+        # Create tables with updated schema
         db.create_all()
         app.logger.info('Database tables created successfully')
         
-        # Check if default user exists
-        user = User.query.filter_by(email='admin@akrun.com').first()
-        if not user:
-            # Create default user
-            default_user = User(
-                email='admin@akrun.com',
-                password=generate_password_hash('admin123', method='scrypt')
-            )
-            db.session.add(default_user)
-            db.session.commit()
-            app.logger.info('Created default admin user')
-        else:
-            app.logger.info('Default admin user already exists')
+        # Create default user
+        default_user = User(
+            email='admin@akrun.com',
+            password=generate_password_hash('admin123', method='sha256')
+        )
+        db.session.add(default_user)
+        db.session.commit()
+        app.logger.info('Created default admin user')
             
     except Exception as e:
         app.logger.error(f'Database initialization error: {str(e)}')
@@ -128,9 +127,10 @@ except Exception as e:
     # Don't raise the exception - let the app continue without DB
 
 class User(UserMixin, db.Model):
+    """User model with increased password field length for scrypt hashes"""
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(128), nullable=False)
+    password = db.Column(db.String(512), nullable=False)  # Increased length for scrypt hash
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -146,14 +146,25 @@ with app.app_context():
         db.session.commit()
 
 # Remove login_required from home route
+@app.route('/test')
+def test():
+    """Simple test route that doesn't use templates or database"""
+    app.logger.info('Test route accessed')
+    return 'AKrun Analytics API is running!'
+
 @app.route('/')
 def home():
     app.logger.info('Accessing home route')
     try:
+        # Log template folder information
+        app.logger.info(f'Template folder: {app.template_folder}')
+        app.logger.info(f'Available templates: {os.listdir(app.template_folder)}')
+        
         # Basic template rendering without database access
         return render_template('index.html')
     except Exception as e:
         app.logger.error(f'Error rendering home page: {str(e)}')
+        app.logger.exception('Full traceback:')
         return 'Welcome to AKrun Analytics! Our site is currently under maintenance.', 503
 
 @app.route('/founder')
@@ -170,12 +181,19 @@ def login():
         if request.method == 'POST':
             email = request.form.get('email')
             password = request.form.get('password')
+            app.logger.debug(f'Login attempt for email: {email}')
             
             try:
                 user = User.query.filter_by(email=email).first()
-                if user and check_password_hash(user.password, password):
-                    login_user(user)
-                    return redirect(url_for('dashboard'))
+                if user:
+                    app.logger.debug('User found, checking password')
+                    if check_password_hash(user.password, password):
+                        login_user(user)
+                        app.logger.info(f'Successful login for {email}')
+                        return redirect(url_for('dashboard'))
+                    app.logger.warning(f'Invalid password for {email}')
+                else:
+                    app.logger.warning(f'No user found with email: {email}')
                 return 'Invalid credentials'
             except Exception as db_error:
                 app.logger.error(f'Database error during login: {str(db_error)}')
