@@ -1,4 +1,6 @@
-from flask import Flask, render_template, jsonify, request, send_from_directory
+from flask import Flask, render_template, jsonify, request, send_from_directory, current_app
+import logging
+import sys
 from flask_cors import CORS
 from flask_login import LoginManager, login_required
 from flask_sqlalchemy import SQLAlchemy
@@ -11,8 +13,13 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Enable debugging in development
+# Configure logging
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.DEBUG)
+
+# Enable debugging
 app.config['DEBUG'] = True
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 # Configure SQLAlchemy and Login Manager
 import os
@@ -30,7 +37,14 @@ login_manager.init_app(app)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    app.logger.info('Accessing home route')
+    try:
+        app.logger.debug(f'Template folder: {current_app.template_folder}')
+        app.logger.debug(f'Available templates: {os.listdir(current_app.template_folder)}')
+        return render_template('index.html')
+    except Exception as e:
+        app.logger.error(f'Error rendering home page: {str(e)}')
+        return f'Error: {str(e)}', 500
 
 @app.route('/founder')
 def founder():
