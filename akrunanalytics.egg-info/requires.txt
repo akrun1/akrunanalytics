@@ -1,12 +1,2 @@
-flask
-flask-cors
-flask-login
-flask-sqlalchemy
-gunicorn
-python-dotenv
-plotly
-dash
-pandas
-numpy
-scikit-learn
-psycopg2-binary
+flask>=3.0.0
+gunicorn>=21.2.0
