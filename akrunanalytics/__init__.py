@@ -18,27 +18,39 @@ logger.info('Starting AKrun Analytics application')
 logger.debug(f'Current working directory: {os.getcwd()}')
 logger.debug(f'Python path: {sys.path}')
 
-package_dir = os.path.abspath(os.path.dirname(__file__))
+# Set template folder explicitly
+package_dir = os.path.dirname(os.path.abspath(__file__))
+template_dir = os.path.join(package_dir, 'templates')
+static_dir = os.path.join(package_dir, 'static')
+
+# Ensure template and static directories exist
+os.makedirs(template_dir, exist_ok=True)
+os.makedirs(static_dir, exist_ok=True)
+
 logger.info(f'Package directory: {package_dir}')
+logger.info(f'Templates directory: {template_dir}')
+logger.info(f'Static directory: {static_dir}')
 
-# Explicitly set template folder
-templates_dir = os.path.join(package_dir, 'templates')
-logger.info(f'Templates directory: {templates_dir}')
-
-# Create Flask app with explicit template_folder
-app = Flask(__name__, template_folder=templates_dir)
-logger.info('Flask app created with explicit template folder')
-
-# Log template directory contents
+# Create Flask app
 try:
-    if os.path.exists(templates_dir):
-        logger.info(f'Template directory exists: {templates_dir}')
-        template_files = os.listdir(templates_dir)
+    app = Flask(__name__, 
+                template_folder=template_dir,
+                static_folder=static_dir,
+                static_url_path='/static')
+    logger.info('Flask app created with explicit template folder')
+    
+    # Verify template directory is accessible
+    template_exists = os.path.exists(template_dir)
+    logger.info(f'Template directory exists: {template_dir}')
+    
+    # List template files for debugging
+    if template_exists:
+        template_files = os.listdir(template_dir)
         logger.info(f'Template files: {template_files}')
     else:
-        logger.error(f'Template directory does not exist: {templates_dir}')
+        logger.error(f'Template directory does not exist: {template_dir}')
 except Exception as e:
-    logger.exception(f'Error checking template directory: {e}')
+    logger.exception(f'Error creating Flask app: {e}')
 
 # Configuration
 app.config['SECRET_KEY'] = 'your-secret-key'
@@ -339,8 +351,8 @@ def debug_info():
             'sys.path': sys.path,
             'current_dir': os.getcwd(),
             'package_dir': package_dir,
-            'template_dir': templates_dir,
-            'template_dir_exists': os.path.exists(templates_dir),
+            'template_dir': template_dir,
+            'template_dir_exists': os.path.exists(template_dir),
             'app_template_folder': app.template_folder,
         }
         
@@ -353,9 +365,9 @@ def debug_info():
         debug_data['environment_selected'] = env_vars
         
         # Check if template directory exists and list contents
-        if os.path.exists(templates_dir):
+        if os.path.exists(template_dir):
             try:
-                debug_data['template_files'] = os.listdir(templates_dir)
+                debug_data['template_files'] = os.listdir(template_dir)
             except Exception as e:
                 debug_data['template_files_error'] = str(e)
         
@@ -426,7 +438,49 @@ def serve_static_test():
         logger.exception(f'Error serving static test file: {e}')
         return f'Error serving static test file: {str(e)}'
 
-# Add error handlers to log issues
+# Add simple diagnostic routes for testing
+@app.route('/simple')
+def simple():
+    """A super simple route that just returns plain text without template rendering."""
+    logger.info('Simple route accessed')
+    return 'Simple route is working!'
+
+@app.route('/env')
+def env_info():
+    """Display environment information for debugging."""
+    logger.info('Environment route accessed')
+    env_info = {
+        'python_version': sys.version,
+        'env_vars': {k: v for k, v in os.environ.items() if not k.startswith('AWS') and not k.startswith('HEROKU') and not 'KEY' in k and not 'SECRET' in k},
+        'app_config': {
+            'debug': app.debug,
+            'testing': app.testing,
+            'template_folder': app.template_folder,
+            'static_folder': app.static_folder
+        },
+        'request_info': {
+            'host': request.host,
+            'path': request.path,
+            'url': request.url,
+            'headers': dict(request.headers)
+        }
+    }
+    
+    # Return as plain text for simplicity
+    response_text = "Environment Information:\n\n"
+    
+    for category, items in env_info.items():
+        response_text += f"=== {category.upper()} ===\n"
+        if isinstance(items, dict):
+            for key, value in items.items():
+                response_text += f"{key}: {value}\n"
+        else:
+            response_text += f"{items}\n"
+        response_text += "\n"
+    
+    return response_text, 200, {'Content-Type': 'text/plain'}
+
+# Additional error handlers to log issues
 @app.errorhandler(404)
 def page_not_found(e):
     logger.error(f"404 error: {request.path}")
