@@ -1,7 +1,8 @@
-from flask import Flask, render_template, jsonify, request, current_app
+from flask import Flask, render_template, jsonify, request, current_app, redirect, url_for, flash
 from flask_cors import CORS
-from flask_login import LoginManager, login_required
+from flask_login import LoginManager, login_required, UserMixin, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 import sys
 import os
@@ -30,7 +31,27 @@ if app.config['SQLALCHEMY_DATABASE_URI'].startswith('postgres://'):
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
 
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(128), nullable=False)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+# Create tables and add a default user if none exists
+with app.app_context():
+    db.create_all()
+    if not User.query.filter_by(email='admin@akrun.com').first():
+        default_user = User(email='admin@akrun.com',
+                          password=generate_password_hash('admin123'))
+        db.session.add(default_user)
+        db.session.commit()
+
+# Remove login_required from home route
 @app.route('/')
 def home():
     app.logger.info('Accessing home route')
@@ -49,6 +70,26 @@ def founder():
 @app.route('/snake-game')
 def snake_game():
     return render_template('snake-game.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user = User.query.filter_by(email=email).first()
+        
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for('dashboard'))
+        return 'Invalid credentials'
+    
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 @app.route('/dashboard')
 @login_required
