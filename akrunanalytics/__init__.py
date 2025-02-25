@@ -76,7 +76,7 @@ class User(UserMixin, db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
+    password = db.Column(db.String(255))  # Increased from 100 to 255 to accommodate longer hash
     name = db.Column(db.String(1000))
 
 # Create database and default user
@@ -87,6 +87,17 @@ try:
         inspector = db.inspect(db.engine)
         tables = inspector.get_table_names()
         logger.info(f'Existing tables: {tables}')
+        
+        # For PostgreSQL, we need to drop and recreate the users table due to password column size change
+        if db.engine.url.get_dialect().name == 'postgresql' and 'users' in tables:
+            logger.info('Dropping users table to update schema')
+            # Use direct SQL to drop the table
+            with db.engine.connect() as conn:
+                conn.execute(db.text('DROP TABLE IF EXISTS "users" CASCADE'))
+                conn.commit()
+            logger.info('Users table dropped')
+            # Remove 'users' from tables list so we create it next
+            tables = [t for t in tables if t != 'users']
         
         if 'users' not in tables:
             logger.info('Creating users table')
