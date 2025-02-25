@@ -1,5 +1,6 @@
 recursive-include akrunanalytics/templates *.html
 recursive-include akrunanalytics/static *
+include akrunanalytics/*.html
 include requirements.txt
 include runtime.txt
 include Procfile
