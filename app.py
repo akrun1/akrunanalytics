@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_from_directory
 from flask_cors import CORS
 from flask_login import LoginManager, login_required
 from flask_sqlalchemy import SQLAlchemy
@@ -6,8 +6,9 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='public', static_url_path='')
 CORS(app)
 
 # Configure SQLAlchemy and Login Manager
@@ -26,7 +27,13 @@ login_manager.init_app(app)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return send_from_directory('public', 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    if os.path.exists(os.path.join('public', path)):
+        return send_from_directory('public', path)
+    return send_from_directory('public', 'index.html')
 
 @app.route('/game')
 def game():
