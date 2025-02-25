@@ -191,6 +191,20 @@ except Exception as e:
     logger.exception(f'Error during database initialization: {e}')
     logger.warning('Continuing application startup despite database error')
 
+# Add detailed request logging
+@app.before_request
+def log_request_info():
+    logger.info(f'Request received: {request.method} {request.path}')
+    logger.debug(f'Request headers: {dict(request.headers)}')
+    logger.debug(f'Request remote addr: {request.remote_addr}')
+    logger.debug(f'Request url: {request.url}')
+
+@app.after_request
+def log_response_info(response):
+    logger.info(f'Response status: {response.status_code}')
+    logger.debug(f'Response headers: {dict(response.headers)}')
+    return response
+
 # User loader for Flask-Login
 @login_manager.user_loader
 def load_user(user_id):
@@ -203,17 +217,32 @@ def home():
     try:
         logger.info('Attempting to render index.html template')
         logger.debug(f'Template folder is: {app.template_folder}')
-        logger.debug(f'Index template exists: {os.path.exists(os.path.join(app.template_folder, "index.html"))}')
         
-        # List all templates for debugging
+        # Verbose template path checking
         template_path = os.path.join(app.template_folder, "index.html")
+        template_exists = os.path.exists(template_path)
         logger.info(f'Absolute template path: {template_path}')
+        logger.info(f'Template file exists: {template_exists}')
         
+        # Try to access the template file content for debugging
+        try:
+            with open(template_path, 'r') as f:
+                template_content = f.read()
+                logger.debug(f'Template content length: {len(template_content)} chars')
+                logger.debug(f'Template content first 100 chars: {template_content[:100]}')
+        except Exception as file_err:
+            logger.error(f'Error reading template file: {file_err}')
+        
+        # Additional logging of template context
+        logger.debug(f'Current route: {request.path}')
+        logger.debug(f'Current URL: {request.url}')
+        
+        # Render the template with extra error handling
         return render_template('index.html')
     except Exception as e:
         logger.exception(f'Error rendering index.html: {e}')
         # Return a simple HTML page if template rendering fails
-        return f'''
+        error_html = f'''
         <!DOCTYPE html>
         <html>
         <head>
@@ -229,10 +258,17 @@ def home():
             <p>There was an error rendering the index.html template. Please check the logs for more details.</p>
             <pre>{str(e)}</pre>
             <p>Template folder: {app.template_folder}</p>
-            <p>Template exists: {os.path.exists(os.path.join(app.template_folder, "index.html"))}</p>
+            <p>Template exists: {template_exists}</p>
+            <h2>App Configuration</h2>
+            <pre>Debug: {app.debug}
+Testing: {app.testing}
+Static Folder: {app.static_folder}
+Static URL Path: {app.static_url_path}</pre>
         </body>
         </html>
         '''
+        logger.info(f'Returning error HTML due to template error: {len(error_html)} chars')
+        return error_html
 
 @app.route('/test')
 def test():
