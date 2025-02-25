@@ -38,3 +38,29 @@ def home():
 @app.route('/test')
 def test():
     return 'Hello from AKrun Analytics!'
+
+@app.route('/static_test')
+def static_test():
+    return '''
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>AKrun Static Test</title>
+    </head>
+    <body>
+        <h1>This is a static test page</h1>
+        <p>If you can see this, the server is working correctly but may have issues with templates.</p>
+    </body>
+    </html>
+    '''
+
+@app.route('/static_file')
+def static_file():
+    static_file_path = os.path.join(package_dir, 'static_index.html')
+    app.logger.debug(f'Static file path: {static_file_path}')
+    app.logger.debug(f'Static file exists: {os.path.exists(static_file_path)}')
+    
+    with open(static_file_path, 'r') as f:
+        content = f.read()
+    
+    return content
