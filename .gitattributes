@@ -1,0 +1,4 @@
+# Mark Python backend files as linguist-vendored to exclude them from language statistics
+akrunanalytics/**/*.py linguist-vendored=true
+*.py.backend linguist-vendored=true
+*.txt.backend linguist-vendored=true
