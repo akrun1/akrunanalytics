@@ -1,9 +1,65 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './App.css'
 import ContactForm from './ContactForm'
+import axios from 'axios'
 
 function App() {
+  const [newsItems, setNewsItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        // Using NewsAPI for technology and business news via Netlify proxy
+        const response = await axios.get(
+          `/api/v2/top-headlines?country=us&category=technology&pageSize=2&apiKey=${import.meta.env.VITE_NEWS_API_KEY}`
+        );
+        
+        // Format the data from the API
+        if (response.data && response.data.articles) {
+          const formattedNews = response.data.articles.map((article, index) => ({
+            id: `news-${index}`,
+            title: article.title,
+            summary: article.description || 'Click to read more about this story.',
+            content: article.content,
+            date: new Date(article.publishedAt).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric'
+            }),
+            url: article.url
+          }));
+          
+          setNewsItems(formattedNews);
+        }
+      } catch (error) {
+        console.error('Error fetching news:', error);
+        // Fallback to static news if API fails
+        setNewsItems([
+          {
+            id: 'claude-anthropic-ai',
+            title: 'Claude: Everything you need to know about Anthropic\'s AI',
+            summary: 'Anthropic, one of the world\'s largest AI vendors, has a powerful family of generative AI models called Claude.',
+            date: 'Feb 26, 2025',
+            url: 'https://www.techcrunch.com/claude-anthropic-ai'
+          },
+          {
+            id: 'chatgpt-pricing',
+            title: 'How much does ChatGPT cost? Everything you need to know about OpenAI\'s pricing plans',
+            summary: 'OpenAI offers an array of plans for ChatGPT, both paid and free. 2024 TechCrunch.',
+            date: 'Feb 25, 2025',
+            url: 'https://www.techcrunch.com/chatgpt-pricing'
+          }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchNews();
+  }, []);
+
   return (
     <div className="app">
       {/* Navigation Header */}
@@ -65,18 +121,18 @@ function App() {
           {/* Tech & Finance Updates */}
           <section className="updates">
             <h3>Tech & Finance Updates</h3>
-            <div className="update-card">
-              <h4>Claude: Everything you need to know about Anthropic's AI</h4>
-              <p>Anthropic, one of the world's largest AI vendors, has a powerful family of generative AI models cal...</p>
-              <span className="update-date">Feb 26, 2025</span>
-              <Link to="/news/claude-anthropic-ai" className="read-more">Read More →</Link>
-            </div>
-            <div className="update-card">
-              <h4>How much does ChatGPT cost? Everything you need to know about OpenAI's pricing plans</h4>
-              <p>OpenAI offers an array of plans for ChatGPT, both paid and free. 2024 TechCrunch. All rights rese...</p>
-              <span className="update-date">Feb 25, 2025</span>
-              <Link to="/news/chatgpt-pricing" className="read-more">Read More →</Link>
-            </div>
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              newsItems.map((update, index) => (
+                <div key={update.id} className="update-card">
+                  <h4>{update.title}</h4>
+                  <p>{update.summary}</p>
+                  <span className="update-date">{update.date}</span>
+                  <Link to={update.url} className="read-more" target="_blank">Read More →</Link>
+                </div>
+              ))
+            )}
           </section>
         </div>
       </div>
