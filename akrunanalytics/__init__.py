@@ -5,6 +5,7 @@ import datetime
 from flask import Flask, render_template, send_from_directory, request, redirect, url_for, jsonify, flash, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Setup more detailed logging
@@ -37,6 +38,14 @@ try:
                 template_folder=template_dir,
                 static_folder=static_dir,
                 static_url_path='/static')
+    # Enable CORS with specific configuration for API endpoints
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": "*",  # In production, specify exact domains
+            "methods": ["GET", "POST", "PUT", "DELETE"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
     logger.info('Flask app created with explicit template folder')
     
     # Verify template directory is accessible
@@ -677,5 +686,95 @@ def delete_message(message_id):
         logger.exception(f'Error deleting message {message_id}: {e}')
         flash(f'Error deleting message: {str(e)}', 'error')
         return redirect(url_for('admin_messages'))
+
+# API Routes
+@app.route('/api/contact', methods=['POST'])
+def api_contact():
+    """API endpoint for contact form submissions."""
+    logger.info('API contact endpoint accessed')
+    try:
+        # Get data from request
+        data = request.json
+        if not data:
+            logger.warning('No JSON data in request')
+            return jsonify({
+                'success': False,
+                'message': 'No data provided'
+            }), 400
+            
+        # Extract form data
+        name = data.get('name', '')
+        email = data.get('email', '')
+        subject = data.get('subject', '')
+        message = data.get('message', '')
+        
+        # Validate required fields
+        if not all([name, email, message]):
+            logger.warning('Missing required fields in contact form submission')
+            return jsonify({
+                'success': False,
+                'message': 'Please fill out all required fields'
+            }), 400
+            
+        # Create new contact message
+        new_message = ContactMessage(
+            name=name,
+            email=email,
+            subject=subject,
+            message=message,
+            timestamp=datetime.datetime.now()
+        )
+        
+        # Save to database
+        db.session.add(new_message)
+        db.session.commit()
+        
+        logger.info(f'Contact message from {name} ({email}) submitted successfully via API')
+        return jsonify({
+            'success': True,
+            'message': 'Your message has been sent. Thank you!'
+        })
+        
+    except Exception as e:
+        logger.exception(f'Error processing API contact submission: {e}')
+        return jsonify({
+            'success': False,
+            'message': 'An error occurred while processing your request'
+        }), 500
+
+@app.route('/api/messages', methods=['GET'])
+@login_required
+def api_messages():
+    """API endpoint for retrieving contact messages (admin only)."""
+    logger.info('API messages endpoint accessed')
+    try:
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 10, type=int)
+        
+        messages = ContactMessage.query.order_by(ContactMessage.timestamp.desc()).paginate(page=page, per_page=per_page)
+        
+        return jsonify({
+            'success': True,
+            'data': {
+                'messages': [{
+                    'id': message.id,
+                    'name': message.name,
+                    'email': message.email,
+                    'subject': message.subject,
+                    'message': message.message,
+                    'timestamp': message.timestamp.isoformat()
+                } for message in messages.items],
+                'page': page,
+                'per_page': per_page,
+                'total': messages.total,
+                'pages': messages.pages
+            }
+        })
+    except Exception as e:
+        logger.exception(f'Error retrieving messages via API: {e}')
+        return jsonify({
+            'success': False,
+            'message': 'An error occurred while retrieving messages'
+        }), 500
 
 logger.info('AKrun Analytics app initialization complete')
