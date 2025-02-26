@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import './App.css'
 import ContactForm from './ContactForm'
 
@@ -8,13 +9,13 @@ function App() {
       {/* Navigation Header */}
       <header className="header">
         <div className="container">
-          <a href="/" className="logo">akrun Analytics</a>
+          <Link to="/" className="logo">akrun Analytics</Link>
           <nav className="main-nav">
             <ul>
-              <li><a href="#services">Services</a></li>
-              <li><a href="#analytics">Analytics</a></li>
-              <li><a href="/founder">About Founder</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li><Link to="#services">Services</Link></li>
+              <li><Link to="/analytics">Analytics</Link></li>
+              <li><Link to="/founder">About Founder</Link></li>
+              <li><Link to="#contact">Contact</Link></li>
             </ul>
           </nav>
         </div>
@@ -26,7 +27,7 @@ function App() {
           <section className="hero">
             <h1>Transform Your Data into Actionable Insights</h1>
             <p>Leveraging advanced analytics and machine learning to drive business growth and innovation</p>
-            <a href="#contact" className="button primary">Get Started</a>
+            <Link to="#contact" className="button primary">Get Started</Link>
           </section>
 
           {/* Services Section */}
@@ -58,7 +59,7 @@ function App() {
           {/* Snake Game */}
           <section className="games">
             <h3>Take a Break!</h3>
-            <a href="/snake-game" className="game-link">🎮 Play Snake Game</a>
+            <Link to="/snake-game" className="game-link">🎮 Play Snake Game</Link>
           </section>
 
           {/* Tech & Finance Updates */}
@@ -68,13 +69,13 @@ function App() {
               <h4>Claude: Everything you need to know about Anthropic's AI</h4>
               <p>Anthropic, one of the world's largest AI vendors, has a powerful family of generative AI models cal...</p>
               <span className="update-date">Feb 26, 2025</span>
-              <a href="/news/claude-anthropic-ai" className="read-more">Read More →</a>
+              <Link to="/news/claude-anthropic-ai" className="read-more">Read More →</Link>
             </div>
             <div className="update-card">
               <h4>How much does ChatGPT cost? Everything you need to know about OpenAI's pricing plans</h4>
               <p>OpenAI offers an array of plans for ChatGPT, both paid and free. 2024 TechCrunch. All rights rese...</p>
               <span className="update-date">Feb 25, 2025</span>
-              <a href="/news/chatgpt-pricing" className="read-more">Read More →</a>
+              <Link to="/news/chatgpt-pricing" className="read-more">Read More →</Link>
             </div>
           </section>
         </div>
