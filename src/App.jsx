@@ -17,12 +17,27 @@ function App() {
         
         // Try to fetch from our serverless function first
         try {
+          // Determine if we're on Netlify, Heroku, or local development
           const isNetlify = window.location.hostname.includes('akrunanalyticscorp.com');
-          const netlifyFunctionUrl = isNetlify ? '/.netlify/functions/newsapi' : 'http://localhost:8888/.netlify/functions/newsapi';
+          const isHeroku = window.location.hostname.includes('herokuapp.com');
           
-          console.log('Fetching news from:', netlifyFunctionUrl);
+          let newsEndpoint;
+          if (isNetlify) {
+            newsEndpoint = '/.netlify/functions/newsapi';
+            console.log('Using Netlify function endpoint for news');
+          } else if (isHeroku) {
+            // If on Heroku, use a different endpoint if you have one
+            newsEndpoint = '/api/news'; 
+            console.log('Using Heroku API endpoint for news');
+          } else {
+            // Local development
+            newsEndpoint = 'http://localhost:8888/.netlify/functions/newsapi';
+            console.log('Using local development endpoint for news');
+          }
           
-          const response = await axios.get(netlifyFunctionUrl);
+          console.log('Fetching news from endpoint:', newsEndpoint);
+          
+          const response = await axios.get(newsEndpoint, { timeout: 10000 });
           
           console.log('API Response:', response.status);
           
@@ -44,9 +59,14 @@ function App() {
             
             setNewsItems(formattedNews);
             return; // Exit early if successful
+          } else {
+            console.warn('No articles found in API response:', response.data);
           }
         } catch (apiError) {
-          console.error('Netlify function call failed:', apiError.message);
+          console.error('API call failed:', apiError.message);
+          if (apiError.response) {
+            console.error('Error response:', apiError.response.status, apiError.response.data);
+          }
           // Continue to fallback if serverless function call fails
         }
         
