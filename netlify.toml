@@ -1,18 +1,18 @@
+# Simple build configuration
 [build]
-  command = "npm run build"
+  command = "cp netlify-frontend-package.json package.json && npm ci && npm run build"
   publish = "dist"
+  ignore_requirements_txt = true
+  environment = { NODE_VERSION = "18", PYTHON_ENABLED = "false" }
 
-[build.processing]
-  skip_processing = true
-
-# Redirect API requests to your Heroku backend
+# Redirect API requests to the backend
 [[redirects]]
   from = "/api/*"
   to = "https://api.akrunanalyticscorp.com/api/:splat"
   status = 200
   force = true
 
-# Support for single-page applications with React Router
+# Support SPA routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
