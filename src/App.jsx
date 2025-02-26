@@ -15,15 +15,14 @@ function App() {
       try {
         console.log('Fetching news...');
         
-        // Try the NewsAPI directly first with a CORS proxy for development
+        // Try to fetch from our serverless function first
         try {
-          const apiKey = import.meta.env.VITE_NEWS_API_KEY;
-          console.log('Using API Key (masked):', apiKey ? `${apiKey.substring(0, 4)}...` : 'Not found');
+          const isNetlify = window.location.hostname.includes('akrunanalyticscorp.com');
+          const netlifyFunctionUrl = isNetlify ? '/.netlify/functions/newsapi' : 'http://localhost:8888/.netlify/functions/newsapi';
           
-          const response = await axios.get(
-            `https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=3&apiKey=${apiKey}`,
-            { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-          );
+          console.log('Fetching news from:', netlifyFunctionUrl);
+          
+          const response = await axios.get(netlifyFunctionUrl);
           
           console.log('API Response:', response.status);
           
@@ -47,11 +46,11 @@ function App() {
             return; // Exit early if successful
           }
         } catch (apiError) {
-          console.error('Direct API call failed:', apiError.message);
-          // Continue to fallback if direct API call fails
+          console.error('Netlify function call failed:', apiError.message);
+          // Continue to fallback if serverless function call fails
         }
         
-        // If we're here, the direct API call failed
+        // If we're here, the function call failed
         console.log('Using local mock news data');
         setNewsItems(getMockNews());
       } catch (error) {
@@ -84,10 +83,10 @@ function App() {
           <Link to="/" className="logo">akrun Analytics</Link>
           <nav className="main-nav">
             <ul>
-              <li><Link to="#services">Services</Link></li>
+              <li><a href="#services">Services</a></li>
               <li><Link to="/analytics">Analytics</Link></li>
               <li><Link to="/founder">About Founder</Link></li>
-              <li><Link to="#contact">Contact</Link></li>
+              <li><a href="#contact">Contact</a></li>
             </ul>
           </nav>
         </div>
@@ -99,7 +98,7 @@ function App() {
           <section className="hero">
             <h1>Transform Your Data into Actionable Insights</h1>
             <p>Leveraging advanced analytics and machine learning to drive business growth and innovation</p>
-            <Link to="#contact" className="button primary">Get Started</Link>
+            <a href="#contact" className="button primary">Get Started</a>
           </section>
 
           {/* Services Section */}
