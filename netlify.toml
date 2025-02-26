@@ -1,7 +1,11 @@
-# Basic Netlify configuration for a React project
 [build]
   command = "CI= npm run build"
   publish = "dist"
+  environment = { NETLIFY_USE_YARN = "true", NODE_VERSION = "18", PYTHON_VERSION = "off", NODE_ENV = "production" }
+  ignore_requirements_txt = true
+
+[build.processing]
+  skip_processing = true
 
 # Redirect API requests to your Heroku backend
 [[redirects]]
