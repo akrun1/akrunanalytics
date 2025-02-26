@@ -61,18 +61,67 @@ function ContactForm() {
       setIsSubmitting(true);
       showStatus('Sending your message...');
       
-      // Get the form element
+      // Try both approaches in parallel
+      const promises = [];
+      
+      // 1. Try Netlify Forms
       const form = e.target;
-      const formData = new FormData(form);
+      const formDataObj = new FormData(form);
       
-      // Submit the form data to Netlify
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData).toString()
-      });
+      promises.push(
+        fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formDataObj).toString()
+        }).catch(error => {
+          console.log('Netlify form submission error:', error);
+          return null; // Return null on error to continue with other methods
+        })
+      );
       
-      if (response.ok) {
+      // 2. Try Heroku API
+      const API_ENDPOINT = import.meta.env.VITE_API_URL || 'https://akrun-analytics-62aa25462087.herokuapp.com/api/contact';
+      
+      console.log('Submitting to API:', API_ENDPOINT);
+      
+      promises.push(
+        fetch(API_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        }).catch(error => {
+          console.log('Heroku API error:', error);
+          return null; // Return null on error to continue with other methods
+        })
+      );
+      
+      // 3. Try Netlify function
+      promises.push(
+        fetch('/.netlify/functions/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        }).catch(error => {
+          console.log('Netlify function error:', error);
+          return null; // Return null on error to continue with other methods
+        })
+      );
+      
+      // Wait for all promises to settle
+      const results = await Promise.allSettled(promises);
+      console.log('Form submission results:', results);
+      
+      // Check if any submission was successful
+      const anySuccess = results.some(result => 
+        result.status === 'fulfilled' && result.value && result.value.ok
+      );
+      
+      if (anySuccess) {
         // Success - clear form and show success message
         setFormData({
           name: '',
@@ -82,8 +131,8 @@ function ContactForm() {
         });
         showStatus('Your message has been sent. Thank you!');
       } else {
-        // Error response
-        showStatus('An error occurred. Please try again.', true);
+        // All methods failed
+        showStatus('Unable to send your message. Please try again later.', true);
       }
     } catch (error) {
       console.error('Contact form submission error:', error);
