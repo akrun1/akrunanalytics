@@ -535,4 +535,25 @@ def handle_exception(e):
     # Return a generic error page
     return render_template('500.html'), 500
 
+# Add routes for founder and snake-game pages
+@app.route('/founder')
+def founder():
+    """Route to display the About Founder page."""
+    logger.info('Founder route accessed')
+    try:
+        return render_template('founder.html')
+    except Exception as e:
+        logger.exception(f'Error rendering founder.html: {e}')
+        return f'Error rendering founder page: {str(e)}', 500
+
+@app.route('/snake-game')
+def snake_game():
+    """Route to display the Snake Game page."""
+    logger.info('Snake Game route accessed')
+    try:
+        return render_template('snake-game.html')
+    except Exception as e:
+        logger.exception(f'Error rendering snake-game.html: {e}')
+        return f'Error rendering snake game page: {str(e)}', 500
+
 logger.info('AKrun Analytics app initialization complete')
