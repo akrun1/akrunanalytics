@@ -1,23 +1,29 @@
+# Simple build configuration
 [build]
-  command = "npm run build"
+  command = "cp netlify-frontend-package.json package.json && npm install --no-audit --no-fund && npm run build && cd netlify/functions && npm install"
   publish = "dist"
-  environment = { NODE_VERSION = "18", NODE_ENV = "production" }
+  ignore_requirements_txt = true
+  environment = { NODE_VERSION = "20", PYTHON_ENABLED = "false" }
+  functions = "netlify/functions"
 
-[build.environment]
-  # Disable Python completely in Netlify
-  PYTHON_VERSION = "off"
+# Plugin to install function dependencies
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
 
-[build.processing]
-  skip_processing = true
+# Redirect API requests to the backend
+[[redirects]]
+  from = "/api/*"
+  to = "https://newsapi.org/:splat"
+  status = 200
 
-# Redirect API requests to your Heroku backend
+# Redirect API requests to the backend
 [[redirects]]
   from = "/api/*"
   to = "https://api.akrunanalyticscorp.com/api/:splat"
   status = 200
   force = true
 
-# Support for single-page applications with React Router
+# Support SPA routing
 [[redirects]]
   from = "/*"
   to = "/index.html"

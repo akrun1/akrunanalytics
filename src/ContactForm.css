@@ -132,11 +132,29 @@
   background-color: #007bff;
   color: white;
   border-radius: 50%;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 }
 
 .social-links a:hover {
   background-color: #0056b3;
+  transform: translateY(-3px);
+}
+
+.social-links svg {
+  width: 20px;
+  height: 20px;
+}
+
+.social-icon.twitter:hover {
+  background-color: #1DA1F2;
+}
+
+.social-icon.linkedin:hover {
+  background-color: #0A66C2;
+}
+
+.social-icon.github:hover {
+  background-color: #333;
 }
 
 @media (max-width: 768px) {

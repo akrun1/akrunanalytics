@@ -6,7 +6,7 @@
   --light-color: #f8f9fa;
   --success-color: #28a745;
   --danger-color: #dc3545;
-  --max-width: 1200px;
+  --max-width: 1400px;
 }
 
 * {
@@ -15,11 +15,19 @@
   padding: 0;
 }
 
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', 'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
   line-height: 1.6;
   color: #333;
   background-color: #000;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 a {
@@ -33,37 +41,81 @@ ul {
 
 .container {
   max-width: var(--max-width);
+  width: 100%;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 15px;
 }
 
 img {
   max-width: 100%;
 }
 
+/* Button Styles */
 .button {
   display: inline-block;
   background: var(--primary-color);
   color: #fff;
-  padding: 0.75rem 1.5rem;
+  padding: 0.9rem 2rem;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  border-radius: 50px;
+  font-weight: 600;
   text-transform: uppercase;
-  font-weight: bold;
-  transition: opacity 0.2s ease-in;
-}
-
-.button.primary {
-  background: var(--primary-color);
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+  position: relative;
+  overflow: hidden;
 }
 
 .button:hover {
-  opacity: 0.9;
+  background: #0056b3;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 123, 255, 0.4);
+}
+
+.button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 123, 255, 0.4);
+}
+
+/* Additional button animation */
+.button::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform 0.5s, opacity 1s;
+}
+
+.button:active::after {
+  transform: scale(0, 0);
+  opacity: 0.3;
+  transition: 0s;
+}
+
+.primary {
+  background-color: var(--primary-color);
+}
+
+.secondary {
+  background-color: var(--secondary-color);
 }
 
 /* App Layout */
 .app {
+  width: 100%;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -115,40 +167,79 @@ img {
 /* Main Content Layout */
 .main-content {
   display: flex;
+  width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0;
 }
 
 .left-content {
   flex: 3;
-  padding-right: 1rem;
+  padding: 1rem;
+  width: 75%;
 }
 
 .right-sidebar {
   flex: 1;
-  padding-left: 1rem;
+  padding: 1rem;
   border-left: 1px solid #333;
   background: #111;
   min-height: calc(100vh - 60px);
+  width: 25%;
+}
+
+/* For screens smaller than 768px, stack the columns */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .left-content,
+  .right-sidebar {
+    width: 100%;
+    max-width: 100%;
+    padding: 1rem;
+  }
+  
+  .right-sidebar {
+    border-left: none;
+    border-top: 1px solid #333;
+  }
 }
 
 /* Hero Section */
 .hero {
-  padding: 3rem 0;
+  padding: 2rem 0;
   color: #fff;
   background-color: #111;
+  text-align: center;
 }
 
 .hero h1 {
   font-size: 3rem;
-  margin-bottom: 1rem;
-  color: #007bff;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(45deg, #007bff, #00c6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 10px rgba(0, 123, 255, 0.2);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
 }
 
 .hero p {
   font-size: 1.2rem;
   margin-bottom: 2rem;
+  color: #e0e0e0;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button {
+  margin: 0 auto;
+  display: block;
 }
 
 /* Services Section */
@@ -190,8 +281,11 @@ img {
 
 /* Games Section */
 .games {
-  padding: 2rem 1rem;
-  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #1a1a1a;
+  border-radius: 5px;
+  border-left: 4px solid #4CAF50;
 }
 
 .games h3 {
@@ -201,17 +295,19 @@ img {
 
 .game-link {
   display: inline-block;
-  margin-top: 1rem;
-  font-size: 1.2rem;
-  padding: 0.5rem 1rem;
-  background: #1a1a1a;
-  border-radius: 5px;
-  transition: background 0.3s;
-  color: #fff;
+  padding: 0.75rem 1.5rem;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 .game-link:hover {
-  background: #333;
+  background-color: #3d8b40;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Updates Section */
@@ -292,21 +388,6 @@ img {
   
   .main-nav li {
     margin: 0 0.7rem;
-  }
-  
-  .main-content {
-    flex-direction: column;
-  }
-  
-  .left-content,
-  .right-sidebar {
-    padding: 0;
-  }
-  
-  .right-sidebar {
-    border-left: none;
-    border-top: 1px solid #333;
-    margin-top: 2rem;
   }
 }
 
