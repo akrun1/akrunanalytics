@@ -4,6 +4,7 @@
   publish = "dist"
   ignore_requirements_txt = true
   environment = { NODE_VERSION = "20", PYTHON_ENABLED = "false" }
+  functions = "netlify/functions"
 
 # Redirect API requests to the backend
 [[redirects]]

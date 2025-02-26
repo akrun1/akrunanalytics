@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './App.css'
 import ContactForm from './ContactForm'
+import NewsFallback from './components/NewsFallback'
+import { getMockNews } from './utils/newsService'
 import axios from 'axios'
 
 function App() {
@@ -11,54 +13,68 @@ function App() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        // Using NewsAPI for technology and business news via Netlify proxy
-        const response = await axios.get(
-          `/api/v2/top-headlines?country=us&category=technology&pageSize=2&apiKey=${import.meta.env.VITE_NEWS_API_KEY}`
-        );
+        console.log('Fetching news...');
         
-        // Format the data from the API
-        if (response.data && response.data.articles) {
-          const formattedNews = response.data.articles.map((article, index) => ({
-            id: `news-${index}`,
-            title: article.title,
-            summary: article.description || 'Click to read more about this story.',
-            content: article.content,
-            date: new Date(article.publishedAt).toLocaleDateString('en-US', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric'
-            }),
-            url: article.url
-          }));
+        // Try the NewsAPI directly first with a CORS proxy for development
+        try {
+          const apiKey = import.meta.env.VITE_NEWS_API_KEY;
+          console.log('Using API Key (masked):', apiKey ? `${apiKey.substring(0, 4)}...` : 'Not found');
           
-          setNewsItems(formattedNews);
-        }
-      } catch (error) {
-        console.error('Error fetching news:', error);
-        // Fallback to static news if API fails
-        setNewsItems([
-          {
-            id: 'claude-anthropic-ai',
-            title: 'Claude: Everything you need to know about Anthropic\'s AI',
-            summary: 'Anthropic, one of the world\'s largest AI vendors, has a powerful family of generative AI models called Claude.',
-            date: 'Feb 26, 2025',
-            url: 'https://www.techcrunch.com/claude-anthropic-ai'
-          },
-          {
-            id: 'chatgpt-pricing',
-            title: 'How much does ChatGPT cost? Everything you need to know about OpenAI\'s pricing plans',
-            summary: 'OpenAI offers an array of plans for ChatGPT, both paid and free. 2024 TechCrunch.',
-            date: 'Feb 25, 2025',
-            url: 'https://www.techcrunch.com/chatgpt-pricing'
+          const response = await axios.get(
+            `https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=3&apiKey=${apiKey}`,
+            { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+          );
+          
+          console.log('API Response:', response.status);
+          
+          // Format the data from the API
+          if (response.data && response.data.articles) {
+            console.log('Articles found:', response.data.articles.length);
+            const formattedNews = response.data.articles.map((article, index) => ({
+              id: `news-${index}`,
+              title: article.title,
+              summary: article.description || 'Click to read more about this story.',
+              content: article.content,
+              date: new Date(article.publishedAt).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+              }),
+              url: article.url
+            }));
+            
+            setNewsItems(formattedNews);
+            return; // Exit early if successful
           }
-        ]);
+        } catch (apiError) {
+          console.error('Direct API call failed:', apiError.message);
+          // Continue to fallback if direct API call fails
+        }
+        
+        // If we're here, the direct API call failed
+        console.log('Using local mock news data');
+        setNewsItems(getMockNews());
+      } catch (error) {
+        console.error('Error fetching news:', error.message);
+        // We'll use the NewsFallback component
+        setNewsItems([]);
       } finally {
         setLoading(false);
       }
     };
     
+    // Fetch news immediately on mount
     fetchNews();
-  }, []);
+    
+    // Set up interval to refresh news every hour (3600000 ms)
+    const intervalId = setInterval(() => {
+      console.log('Refreshing news...');
+      fetchNews();
+    }, 3600000);
+    
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []); // Empty dependency array ensures this runs only on mount
 
   return (
     <div className="app">
@@ -123,7 +139,7 @@ function App() {
             <h3>Tech & Finance Updates</h3>
             {loading ? (
               <p>Loading...</p>
-            ) : (
+            ) : newsItems.length > 0 ? (
               newsItems.map((update, index) => (
                 <div key={update.id} className="update-card">
                   <h4>{update.title}</h4>
@@ -132,6 +148,8 @@ function App() {
                   <Link to={update.url} className="read-more" target="_blank">Read More →</Link>
                 </div>
               ))
+            ) : (
+              <NewsFallback />
             )}
           </section>
         </div>
