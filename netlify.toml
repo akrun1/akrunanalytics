@@ -2,7 +2,8 @@
 [build]
   command = "CI= npm run build"
   publish = "dist"
-  ignore = "git diff --quiet HEAD^ HEAD -- . ':(exclude)requirements.txt' ':(exclude)setup.py' ':(exclude)Procfile' ':(exclude)akrunanalytics/'"
+  # Skip installing python dependencies
+  environment = { SKIP_PYTHON_REQUIREMENTS = "true", PYTHON_VERSION = "off", NODE_VERSION = "18" }
 
 # Redirect API requests to your Heroku backend
 [[redirects]]
