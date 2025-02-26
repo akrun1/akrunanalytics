@@ -184,7 +184,7 @@ function App() {
                   <h4>{update.title}</h4>
                   <p>{update.summary}</p>
                   <span className="update-date">{update.date}</span>
-                  <Link to={update.url} className="read-more" target="_blank">Read More →</Link>
+                  <a href={update.url} className="read-more" target="_blank" rel="noopener noreferrer">Read More →</a>
                 </div>
               ))
             ) : (

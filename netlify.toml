@@ -1,4 +1,5 @@
 # Simple build configuration
+# Cache-busting timestamp: 2025-02-26T15:56:00
 [build]
   command = "cp netlify-frontend-package.json package.json && npm install --no-audit --no-fund && npm run build && cd netlify/functions && npm install"
   publish = "dist"

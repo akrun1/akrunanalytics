@@ -44,12 +44,17 @@ const getMockNews = () => {
 };
 
 exports.handler = async function(event) {
+  // Log environment info for debugging
+  console.log('Function Version: 2025-02-26-v2');
+  console.log('Environment variables available:', Object.keys(process.env).filter(key => !key.includes('KEY') && !key.includes('SECRET')));
+  
   try {
     // Get API key from environment variables - try both formats
     const API_KEY = process.env.VITE_NEWS_API_KEY || process.env.NEWS_API_KEY;
     
     if (!API_KEY) {
       console.log('API key not found in environment variables. Using mock data.');
+      console.log('Available env vars:', Object.keys(process.env).join(', '));
       // Return mock data instead of an error
       return {
         statusCode: 200,
@@ -80,6 +85,13 @@ exports.handler = async function(event) {
     };
   } catch (error) {
     console.log('Error fetching news:', error.message);
+    if (error.response) {
+      console.log('API Error Response:', {
+        status: error.response.status,
+        statusText: error.response.statusText,
+        data: error.response.data
+      });
+    }
     // Return mock data on error as a fallback
     return {
       statusCode: 200,  // Still return 200 with mock data
