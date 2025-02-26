@@ -1,11 +1,7 @@
 [build]
   command = "npm run build"
   publish = "dist"
-  environment = { NODE_VERSION = "18", NODE_ENV = "production" }
-
-[build.environment]
-  # Disable Python completely in Netlify
-  PYTHON_VERSION = "off"
+  environment = { NODE_VERSION = "18", NODE_ENV = "production", PYTHON_VERSION = "off" }
 
 [build.processing]
   skip_processing = true
