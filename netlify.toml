@@ -1,9 +1,15 @@
 [build]
-  publish = "public"
-  command = "mkdir -p public && cp -r templates/* public/ && cp *.html public/"
+  publish = "dist"
+  command = "npm run build"
 
 [[redirects]]
   from = "/api/*"
   to = "https://api.akrunanalyticscorp.com/api/:splat"
   status = 200
   force = true
+
+# This ensures that React Router works properly
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
