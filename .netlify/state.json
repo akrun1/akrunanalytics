@@ -1,0 +1,4 @@
+{
+  "siteId": "your-netlify-site-id",
+  "ignore": ["requirements.txt"]
+}

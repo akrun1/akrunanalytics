@@ -1,8 +1,11 @@
 [build]
-  command = "CI= npm run build"
+  command = "npm run build"
   publish = "dist"
-  environment = { NETLIFY_USE_YARN = "true", NODE_VERSION = "18", PYTHON_VERSION = "off", NODE_ENV = "production" }
-  ignore_requirements_txt = true
+  environment = { NODE_VERSION = "18", NODE_ENV = "production" }
+
+[build.environment]
+  # Disable Python completely in Netlify
+  PYTHON_VERSION = "off"
 
 [build.processing]
   skip_processing = true
