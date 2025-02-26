@@ -19,7 +19,7 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   color: #333;
-  background-color: #fff;
+  background-color: #000;
 }
 
 a {
@@ -62,27 +62,36 @@ img {
   opacity: 0.9;
 }
 
+/* App Layout */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 /* Header */
 .header {
-  background-color: #fff;
+  background-color: #000;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: fixed;
+  padding: 1rem 0;
+  position: sticky;
   top: 0;
   width: 100%;
   z-index: 100;
+  color: #fff;
+  border-bottom: 1px solid #333;
 }
 
 .header .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
 }
 
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--primary-color);
+  color: #fff;
 }
 
 .main-nav ul {
@@ -94,7 +103,7 @@ img {
 }
 
 .main-nav a {
-  color: #333;
+  color: #fff;
   font-weight: 500;
   transition: color 0.3s;
 }
@@ -103,26 +112,38 @@ img {
   color: var(--primary-color);
 }
 
-/* Hero Section */
-.hero {
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/assets/hero-bg.jpg');
-  background-size: cover;
-  background-position: center;
-  height: 80vh;
-  color: #fff;
+/* Main Content Layout */
+.main-content {
   display: flex;
-  align-items: center;
-  text-align: center;
-  margin-top: 60px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
-.hero .container {
-  max-width: 800px;
+.left-content {
+  flex: 3;
+  padding-right: 1rem;
+}
+
+.right-sidebar {
+  flex: 1;
+  padding-left: 1rem;
+  border-left: 1px solid #333;
+  background: #111;
+  min-height: calc(100vh - 60px);
+}
+
+/* Hero Section */
+.hero {
+  padding: 3rem 0;
+  color: #fff;
+  background-color: #111;
 }
 
 .hero h1 {
   font-size: 3rem;
   margin-bottom: 1rem;
+  color: #007bff;
 }
 
 .hero p {
@@ -132,13 +153,16 @@ img {
 
 /* Services Section */
 .services {
-  padding: 5rem 0;
+  padding: 3rem 0;
+  background-color: #111;
+  color: #fff;
 }
 
 .section-title {
   text-align: center;
   margin-bottom: 3rem;
   font-size: 2.5rem;
+  color: #fff;
 }
 
 .services-grid {
@@ -148,10 +172,10 @@ img {
 }
 
 .service-card {
-  background: #f4f4f4;
+  background: #222;
   padding: 2rem;
   border-radius: 5px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease;
 }
 
@@ -164,51 +188,15 @@ img {
   color: var(--primary-color);
 }
 
-/* Analytics Dashboard Section */
-.analytics {
-  padding: 5rem 0;
-  background-color: #f9f9f9;
-}
-
-.dashboard-preview {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.dashboard-placeholder {
-  height: 400px;
-  background: #eee;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: #aaa;
-}
-
-/* Call to Action Section */
-.cta {
-  padding: 5rem 0;
-  text-align: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/cta-bg.jpg');
-  background-size: cover;
-  background-position: center;
-  color: #fff;
-}
-
-.cta h2 {
-  margin-bottom: 1rem;
-}
-
-.cta p {
-  margin-bottom: 2rem;
-  font-size: 1.2rem;
-}
-
 /* Games Section */
 .games {
-  padding: 3rem 0;
+  padding: 2rem 1rem;
   text-align: center;
+}
+
+.games h3 {
+  color: #4CAF50;
+  margin-bottom: 1rem;
 }
 
 .game-link {
@@ -216,37 +204,78 @@ img {
   margin-top: 1rem;
   font-size: 1.2rem;
   padding: 0.5rem 1rem;
-  background: #f4f4f4;
+  background: #1a1a1a;
   border-radius: 5px;
   transition: background 0.3s;
+  color: #fff;
 }
 
 .game-link:hover {
-  background: #e2e2e2;
+  background: #333;
 }
 
 /* Updates Section */
 .updates {
+  padding: 2rem 1rem;
+}
+
+.updates h3 {
+  color: #007bff;
+  margin-bottom: 1.5rem;
+}
+
+.update-card {
+  background: #1a1a1a;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 5px;
+}
+
+.update-card h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.update-card p {
+  font-size: 0.9rem;
+  color: #ccc;
+  margin-bottom: 0.5rem;
+}
+
+.update-date {
+  font-size: 0.8rem;
+  color: #999;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.read-more {
+  color: #007bff;
+  font-size: 0.9rem;
+}
+
+/* Contact Form */
+#contact {
   padding: 3rem 0;
-  background-color: #f9f9f9;
+  background-color: #111;
+  color: #fff;
 }
 
 /* Footer */
 .footer {
   padding: 2rem 0;
-  background-color: var(--dark-color);
+  background-color: #000;
   color: #fff;
   text-align: center;
+  margin-top: auto;
+  border-top: 1px solid #333;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .hero h1 {
     font-size: 2rem;
-  }
-  
-  .hero {
-    height: 60vh;
   }
   
   .section-title {
@@ -264,50 +293,27 @@ img {
   .main-nav li {
     margin: 0 0.7rem;
   }
+  
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .left-content,
+  .right-sidebar {
+    padding: 0;
+  }
+  
+  .right-sidebar {
+    border-left: none;
+    border-top: 1px solid #333;
+    margin-top: 2rem;
+  }
 }
 
-/* Custom Styles for App */
+/* Special styling for React app */
 #root {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
 }

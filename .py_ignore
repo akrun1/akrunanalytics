@@ -1,0 +1,9 @@
+# Tell Netlify to ignore these Python files
+# This file helps Netlify know which files to skip during build
+**/*.py
+requirements.txt
+Procfile
+runtime.txt
+setup.py
+akrunanalytics/
+tests/
