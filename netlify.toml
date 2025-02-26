@@ -1,6 +1,6 @@
 # Simple build configuration
 [build]
-  command = "cp netlify-frontend-package.json package.json && npm ci && npm run build"
+  command = "cp netlify-frontend-package.json package.json && npm install --no-audit --no-fund && npm run build"
   publish = "dist"
   ignore_requirements_txt = true
   environment = { NODE_VERSION = "18", PYTHON_ENABLED = "false" }
