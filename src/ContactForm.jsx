@@ -61,22 +61,18 @@ function ContactForm() {
       setIsSubmitting(true);
       showStatus('Sending your message...');
       
-      // API endpoint - update this to your actual endpoint
-      const API_ENDPOINT = 'https://api.akrunanalyticscorp.com/api/contact';
+      // Get the form element
+      const form = e.target;
+      const formData = new FormData(form);
       
-      // Submit form data to API
-      const response = await fetch(API_ENDPOINT, {
+      // Submit the form data to Netlify
+      const response = await fetch('/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
       });
       
-      // Parse response
-      const result = await response.json();
-      
-      if (result.success) {
+      if (response.ok) {
         // Success - clear form and show success message
         setFormData({
           name: '',
@@ -84,10 +80,10 @@ function ContactForm() {
           subject: '',
           message: ''
         });
-        showStatus(result.message || 'Your message has been sent. Thank you!');
+        showStatus('Your message has been sent. Thank you!');
       } else {
-        // API returned an error
-        showStatus(result.message || 'An error occurred. Please try again.', true);
+        // Error response
+        showStatus('An error occurred. Please try again.', true);
       }
     } catch (error) {
       console.error('Contact form submission error:', error);
@@ -102,7 +98,21 @@ function ContactForm() {
       <div className="container">
         <h2 className="section-title">Contact Us</h2>
         <div className="contact-wrapper">
-          <form id="contact-form" className="contact-form" onSubmit={handleSubmit}>
+          <form 
+            id="contact-form" 
+            className="contact-form" 
+            onSubmit={handleSubmit}
+            name="contact"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+          >
+            {/* Hidden fields for Netlify Forms */}
+            <input type="hidden" name="form-name" value="contact" />
+            <div hidden>
+              <input name="bot-field" />
+            </div>
+            
             <div className="form-group">
               <label htmlFor="name">Your Name</label>
               <input 
