@@ -239,59 +239,6 @@
                 display: none;
             }
         }
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #2d2d2d;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-        .contact-form .form-group {
-            margin-bottom: 20px;
-        }
-        .contact-form label {
-            display: block;
-            margin-bottom: 10px;
-            color: #e0e0e0;
-        }
-        .contact-form input, .contact-form textarea {
-            width: 100%;
-            padding: 15px;
-            background: #1E1E1E;
-            border: none;
-            border-radius: 8px;
-            color: #e0e0e0;
-        }
-        .contact-form input:focus, .contact-form textarea:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-        .contact-form button[type="submit"] {
-            width: 100%;
-            padding: 15px;
-            background: #0066cc;
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            transition: transform 0.3s;
-            border: none;
-        }
-        .contact-form button[type="submit"]:hover {
-            transform: translateY(-5px);
-        }
-        .success-message, .error-message {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            color: #e0e0e0;
-        }
-        .success-message {
-            background: #4CAF50;
-        }
-        .error-message {
-            background: #ff0000;
-        }
     </style>
 </head>
 <body>
@@ -350,38 +297,7 @@
                 <div class="container">
                     <h2>Ready to Get Started?</h2>
                     <p>Let's transform your data into actionable insights</p>
-                    
-                    <div class="contact-form">
-                        <form action="/submit-contact" method="post">
-                            <div class="form-group">
-                                <label for="name">Your Name</label>
-                                <input type="text" id="name" name="name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Your Email</label>
-                                <input type="email" id="email" name="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="subject">Subject</label>
-                                <input type="text" id="subject" name="subject" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Your Message</label>
-                                <textarea id="message" name="message" rows="4" required></textarea>
-                            </div>
-                            <button type="submit" class="cta-button">Send Message</button>
-                        </form>
-                        {% if contact_success %}
-                        <div class="success-message">
-                            <p>Thank you for reaching out! We'll get back to you soon.</p>
-                        </div>
-                        {% endif %}
-                        {% if contact_error %}
-                        <div class="error-message">
-                            <p>{{ contact_error }}</p>
-                        </div>
-                        {% endif %}
-                    </div>
+                    <a href="mailto:contact@akrunanalytics.com" class="cta-button">Contact Us</a>
                 </div>
             </section>
         </div>

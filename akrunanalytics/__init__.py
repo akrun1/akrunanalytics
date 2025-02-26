@@ -1,11 +1,11 @@
 import os
 import sys
 import logging
-from flask import Flask, render_template, send_from_directory, request
-from flask_login import LoginManager, UserMixin
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash
 import datetime
+from flask import Flask, render_template, send_from_directory, request, redirect, url_for, jsonify, flash, session
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Setup more detailed logging
 logging.basicConfig(level=logging.DEBUG, 
@@ -53,7 +53,7 @@ except Exception as e:
     logger.exception(f'Error creating Flask app: {e}')
 
 # Configuration
-app.config['SECRET_KEY'] = 'your-secret-key'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'development-key-for-sessions')
 
 # Set up database
 if os.environ.get('DATABASE_URL'):
@@ -76,20 +76,45 @@ logger.info('Flask app configured')
 db = SQLAlchemy(app)
 logger.info('Database initialized')
 
-# Login manager
+# Set up login manager
 login_manager = LoginManager()
-login_manager.login_view = 'login'
 login_manager.init_app(app)
+login_manager.login_view = 'admin_login'
 logger.info('Login manager initialized')
 
-# Model
-class User(UserMixin, db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    """Load a user from the database."""
+    return User.query.get(int(user_id))
+
+# Create models here
+class User(db.Model, UserMixin):
     __tablename__ = 'users'  # Use a non-reserved keyword for the table name
     
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(255))  # Increased from 100 to 255 to accommodate longer hash
-    name = db.Column(db.String(1000))
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128))
+    
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+# Model for storing contact form submissions
+class ContactMessage(db.Model):
+    __tablename__ = 'contact_messages'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    subject = db.Column(db.String(200), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    
+    def __repr__(self):
+        return f'<ContactMessage {self.id} from {self.email}>'
 
 # Create database and default user
 try:
@@ -124,11 +149,11 @@ try:
                     # If table exists, check and alter password column if needed
                     try:
                         columns = inspector.get_columns('users')
-                        password_col = next((col for col in columns if col['name'] == 'password'), None)
+                        password_col = next((col for col in columns if col['name'] == 'password_hash'), None)
                         
-                        if password_col and password_col.get('type').length < 255:
+                        if password_col and password_col.get('type').length < 128:
                             logger.info('Altering password column to increase length')
-                            conn.execute(db.text('ALTER TABLE "users" ALTER COLUMN "password" TYPE VARCHAR(255)'))
+                            conn.execute(db.text('ALTER TABLE "users" ALTER COLUMN "password_hash" TYPE VARCHAR(128)'))
                             conn.commit()
                             logger.info('Password column altered successfully')
                     except Exception as e:
@@ -148,8 +173,8 @@ try:
                         # Use direct SQL to insert user to avoid SQLAlchemy object conflicts
                         hashed_password = generate_password_hash('admin123')
                         conn.execute(
-                            db.text('INSERT INTO "users" (email, password) VALUES (:email, :password)'),
-                            {"email": "admin@akrun.com", "password": hashed_password}
+                            db.text('INSERT INTO "users" (username, email, password_hash) VALUES (:username, :email, :password)'),
+                            {"username": "admin", "email": "admin@akrun.com", "password": hashed_password}
                         )
                         conn.commit()
                         logger.info('Default admin user created via direct SQL')
@@ -180,8 +205,8 @@ try:
                     logger.info('Creating default admin user')
                     hashed_password = generate_password_hash('admin123')
                     conn.execute(
-                        db.text("INSERT INTO users (email, password) VALUES (:email, :password)"),
-                        {"email": "admin@akrun.com", "password": hashed_password}
+                        db.text("INSERT INTO users (username, email, password_hash) VALUES (:username, :email, :password)"),
+                        {"username": "admin", "email": "admin@akrun.com", "password": hashed_password}
                     )
                     conn.commit()
                     logger.info('Default admin user created via direct SQL')
@@ -204,11 +229,6 @@ def log_response_info(response):
     logger.info(f'Response status: {response.status_code}')
     logger.debug(f'Response headers: {dict(response.headers)}')
     return response
-
-# User loader for Flask-Login
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 # Routes
 @app.route('/')
@@ -474,6 +494,36 @@ def serve_static_test():
         logger.exception(f'Error serving static test file: {e}')
         return f'Error serving static test file: {str(e)}'
 
+# Contact form submission handler
+@app.route('/submit-contact', methods=['POST'])
+def submit_contact():
+    """Handle contact form submissions."""
+    try:
+        name = request.form.get('name')
+        email = request.form.get('email')
+        subject = request.form.get('subject')
+        message = request.form.get('message')
+        
+        logger.info(f'Contact form submission received from {name} ({email})')
+        
+        # Create a new ContactMessage instance
+        contact_message = ContactMessage(name=name, email=email, subject=subject, message=message)
+        
+        # Add the message to the database
+        db.session.add(contact_message)
+        db.session.commit()
+        
+        logger.info('Contact message stored in database')
+        
+        # Store success message in session for flash messaging
+        session['contact_success'] = True
+        
+        # Redirect back to the home page with success status
+        return render_template('index.html', contact_success=True)
+    except Exception as e:
+        logger.exception(f'Error processing contact form: {e}')
+        return render_template('index.html', contact_error=f"Sorry, there was an error processing your request: {str(e)}")
+
 # Add simple diagnostic routes for testing
 @app.route('/simple')
 def simple():
@@ -562,5 +612,70 @@ def profile_image():
     """Serve the profile image directly."""
     logger.info('Profile image requested directly')
     return send_from_directory(app.static_folder, 'profile.jpg')
+
+# Admin authentication routes
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    """Route for admin login."""
+    logger.info('Admin login route accessed')
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        user = User.query.filter_by(username=username).first()
+        
+        if user and check_password_hash(user.password_hash, password):
+            login_user(user)
+            logger.info(f'Admin {username} logged in successfully')
+            return redirect(url_for('admin_messages'))
+        else:
+            logger.warning(f'Failed login attempt for admin {username}')
+            return render_template('admin/login.html', error='Invalid username or password')
+    
+    return render_template('admin/login.html')
+
+@app.route('/admin/logout')
+@login_required
+def admin_logout():
+    """Route for admin logout."""
+    logger.info('Admin logout route accessed')
+    logout_user()
+    return redirect(url_for('admin_login'))
+
+@app.route('/admin/messages')
+@login_required
+def admin_messages():
+    """Route to display the admin messages dashboard."""
+    logger.info('Admin messages dashboard accessed')
+    try:
+        page = request.args.get('page', 1, type=int)
+        per_page = 10
+        
+        messages = ContactMessage.query.order_by(ContactMessage.timestamp.desc()).paginate(page=page, per_page=per_page)
+        
+        return render_template('admin/messages.html', 
+                              messages=messages.items,
+                              page=page,
+                              total_pages=messages.pages or 1)
+    except Exception as e:
+        logger.exception(f'Error rendering admin messages dashboard: {e}')
+        return f'Error: {str(e)}', 500
+
+@app.route('/admin/messages/<int:message_id>/delete', methods=['POST'])
+@login_required
+def delete_message(message_id):
+    """Route to delete a contact message."""
+    logger.info(f'Delete message {message_id} route accessed')
+    try:
+        message = ContactMessage.query.get_or_404(message_id)
+        db.session.delete(message)
+        db.session.commit()
+        
+        flash('Message deleted successfully', 'success')
+        return redirect(url_for('admin_messages'))
+    except Exception as e:
+        logger.exception(f'Error deleting message {message_id}: {e}')
+        flash(f'Error deleting message: {str(e)}', 'error')
+        return redirect(url_for('admin_messages'))
 
 logger.info('AKrun Analytics app initialization complete')
