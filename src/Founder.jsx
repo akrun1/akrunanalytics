@@ -36,7 +36,9 @@ function Founder() {
               </div>
               
               <div className="founder-badge">
-                <span>All-time Top 0.01% StackOverflow Contributor</span>
+                <a href="https://stackoverflow.com/users/3732271/akrun" target="_blank" rel="noopener noreferrer">
+                  <span>All-time Top 0.01% StackOverflow Contributor</span>
+                </a>
               </div>
               
               <p className="founder-bio">
