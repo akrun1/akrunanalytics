@@ -60,9 +60,10 @@
 }
 
 .container {
-  max-width: 1200px;
+  max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 1rem;
+  width: 100%;
 }
 
 /* Founder Intro Section */
@@ -125,6 +126,19 @@
   border-radius: 2rem;
   font-weight: bold;
   margin-bottom: 1.5rem;
+}
+
+.founder-badge a {
+  color: #000;
+  text-decoration: none;
+  display: block;
+}
+
+.founder-badge:hover {
+  background-color: #f57c00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
 .founder-bio {
