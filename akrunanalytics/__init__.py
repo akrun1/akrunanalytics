@@ -556,4 +556,11 @@ def snake_game():
         logger.exception(f'Error rendering snake-game.html: {e}')
         return f'Error rendering snake game page: {str(e)}', 500
 
+# Add a direct route for profile.jpg as a fallback mechanism
+@app.route('/profile.jpg')
+def profile_image():
+    """Serve the profile image directly."""
+    logger.info('Profile image requested directly')
+    return send_from_directory(app.static_folder, 'profile.jpg')
+
 logger.info('AKrun Analytics app initialization complete')
