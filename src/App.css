@@ -32,9 +32,10 @@ ul {
 }
 
 .container {
-  max-width: var(--max-width);
+  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 15px;
 }
 
 img {
@@ -115,15 +116,16 @@ img {
 /* Main Content Layout */
 .main-content {
   display: flex;
-  max-width: var(--max-width);
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0;
-  width: 100%;
 }
 
 .left-content {
   flex: 3;
-  padding: 1rem;
+  padding: 1rem 2rem 1rem 1rem;
+  max-width: 75%;
 }
 
 .right-sidebar {
@@ -132,6 +134,7 @@ img {
   border-left: 1px solid #333;
   background: #111;
   min-height: calc(100vh - 60px);
+  max-width: 25%;
 }
 
 /* Hero Section */
