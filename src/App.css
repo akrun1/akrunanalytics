@@ -116,18 +116,21 @@ img {
 .main-content {
   display: flex;
   max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 1rem;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  width: 100%;
 }
 
 .left-content {
   flex: 3;
-  padding-right: 1rem;
+  padding-right: 2rem;
+  padding-left: 2rem;
 }
 
 .right-sidebar {
   flex: 1;
-  padding-left: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
   border-left: 1px solid #333;
   background: #111;
   min-height: calc(100vh - 60px);
@@ -135,7 +138,7 @@ img {
 
 /* Hero Section */
 .hero {
-  padding: 3rem 0;
+  padding: 3rem 1rem;
   color: #fff;
   background-color: #111;
 }
