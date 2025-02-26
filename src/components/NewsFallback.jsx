@@ -1,5 +1,4 @@
 import React from 'react';
-import './NewsFallback.css';
 
 const NewsFallback = () => {
   const today = "Feb 26, 2025";
@@ -43,15 +42,15 @@ const NewsFallback = () => {
   ];
 
   return (
-    <div className="news-fallback-container">
+    <div className="news-fallback">
       {newsItems.map(item => (
-        <div key={item.id} className="news-item">
-          <h3>{item.title}</h3>
+        <div key={item.id} className="update-card">
+          <h4>{item.title}</h4>
           <p>{item.description}</p>
-          <div className="news-meta">
-            <span className="news-date">{item.date}</span>
-            <a href={item.url} target="_blank" rel="noopener noreferrer" className="read-more">Read More →</a>
-          </div>
+          <span className="update-date">{item.date}</span>
+          <a href={item.url} className="read-more" target="_blank" rel="noopener noreferrer">
+            Read More →
+          </a>
         </div>
       ))}
     </div>
