@@ -13,13 +13,16 @@ function App() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        console.log('Fetching news...');
+        console.log('Fetching news data for Tech & Finance Updates section...');
         
         // Try to fetch from our serverless function first
         try {
           // Determine if we're on Netlify, Heroku, or local development
-          const isNetlify = window.location.hostname.includes('akrunanalyticscorp.com');
-          const isHeroku = window.location.hostname.includes('herokuapp.com');
+          const hostname = window.location.hostname;
+          console.log('Current hostname:', hostname);
+          
+          const isNetlify = hostname.includes('akrunanalyticscorp.com') || hostname.includes('netlify.app');
+          const isHeroku = hostname.includes('herokuapp.com');
           
           let newsEndpoint;
           if (isNetlify) {
@@ -37,13 +40,29 @@ function App() {
           
           console.log('Fetching news from endpoint:', newsEndpoint);
           
-          const response = await axios.get(newsEndpoint, { timeout: 10000 });
+          // Use a timeout to ensure the request doesn't hang indefinitely
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 15000); // 15-second timeout
           
-          console.log('API Response:', response.status);
+          const response = await axios.get(newsEndpoint, { 
+            timeout: 15000,
+            signal: controller.signal 
+          });
+          
+          clearTimeout(timeoutId); // Clear timeout if request completed
+          
+          console.log('API Response Status:', response.status);
+          console.log('API Response Data Type:', typeof response.data);
           
           // Format the data from the API
           if (response.data && response.data.articles) {
             console.log('Articles found:', response.data.articles.length);
+            
+            // Log the first article title for debugging
+            if (response.data.articles.length > 0) {
+              console.log('First article title:', response.data.articles[0].title);
+            }
+            
             const formattedNews = response.data.articles.map((article, index) => ({
               id: `news-${index}`,
               title: article.title,
@@ -58,6 +77,7 @@ function App() {
             }));
             
             setNewsItems(formattedNews);
+            console.log('News data successfully set!');
             return; // Exit early if successful
           } else {
             console.warn('No articles found in API response:', response.data);

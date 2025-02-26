@@ -67,7 +67,11 @@ exports.handler = async function(event) {
     console.log('Fetching news with API key (first 4 chars):', API_KEY.substring(0, 4) + '...');
     const url = `https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=3&apiKey=${API_KEY}`;
     
+    console.log('Requesting from URL:', url.replace(API_KEY, '[REDACTED]'));
     const response = await axios.get(url);
+    
+    console.log('NewsAPI Response Status:', response.status);
+    console.log('NewsAPI Articles Found:', response.data?.articles?.length || 0);
     
     return {
       statusCode: 200,
