@@ -33,10 +33,14 @@
   font-size: 1.5rem;
   font-weight: bold;
   color: #fff;
+  text-decoration: none;
 }
 
 .main-nav ul {
   display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .main-nav li {
@@ -47,6 +51,7 @@
   color: #fff;
   font-weight: 500;
   transition: color 0.3s;
+  text-decoration: none;
 }
 
 .main-nav a:hover,
@@ -73,8 +78,9 @@
   align-items: flex-start;
 }
 
-.image-placeholder {
+.profile-image {
   width: 100%;
+  max-width: 300px;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -98,130 +104,90 @@
   margin-bottom: 1.5rem;
 }
 
+.founder-location {
+  margin-bottom: 1.5rem;
+}
+
+.founder-location p {
+  margin: 0.5rem 0;
+  color: #ddd;
+}
+
+.location-icon, .email-icon {
+  margin-right: 0.5rem;
+}
+
+.founder-badge {
+  display: inline-block;
+  background-color: #ff9800;
+  color: #000;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
 .founder-bio {
   margin-bottom: 1.5rem;
   line-height: 1.6;
 }
 
-.founder-credentials {
-  background-color: #1a1a1a;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-top: 2rem;
-}
-
-.credential {
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #333;
-}
-
-.credential:last-child {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.credential-type {
-  display: block;
-  font-weight: bold;
-  color: #007bff;
-  margin-bottom: 0.5rem;
-}
-
-/* Journey Timeline */
-.founder-journey {
+/* Technical Expertise Section */
+.technical-expertise {
   margin: 4rem 0;
 }
 
-.founder-journey h2 {
+.technical-expertise h2 {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   color: #007bff;
 }
 
-.journey-timeline {
-  position: relative;
-  max-width: 800px;
-  margin: 0 auto;
+.expertise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
 }
 
-.journey-timeline::before {
-  content: '';
-  position: absolute;
-  left: 50px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: #007bff;
-}
-
-.timeline-item {
-  position: relative;
-  margin-bottom: 3rem;
-  padding-left: 80px;
-}
-
-.timeline-marker {
-  position: absolute;
-  left: 44px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #007bff;
-  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.3);
-}
-
-.timeline-content {
+.expertise-card {
   background-color: #1a1a1a;
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.timeline-content h3 {
+.expertise-card h3 {
   color: #007bff;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
 }
 
-.timeline-content h4 {
-  color: #fff;
-  margin-bottom: 0.5rem;
+.expertise-card p {
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
 }
 
-.timeline-content p {
-  margin-bottom: 0.5rem;
-}
-
-/* Philosophy Section */
-.founder-philosophy {
+/* Credentials Section */
+.founder-credentials {
   margin: 4rem 0;
 }
 
-.founder-philosophy h2 {
-  text-align: center;
-  margin-bottom: 2rem;
+.founder-credentials h2 {
   color: #007bff;
+  margin: 2rem 0 1rem;
 }
 
-.philosophy-content {
+.credential {
   background-color: #1a1a1a;
   border-radius: 8px;
-  padding: 2rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-blockquote {
-  border-left: 4px solid #007bff;
-  padding-left: 1.5rem;
-  margin: 2rem 0;
-  font-size: 1.3rem;
-  font-style: italic;
-  color: #eee;
-}
-
-.philosophy-content p {
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
+.credential-detail {
+  display: block;
+  font-size: 1.1rem;
+  color: #ddd;
 }
 
 /* CTA Section */
@@ -248,6 +214,7 @@ blockquote {
   text-transform: uppercase;
   margin-top: 1.5rem;
   transition: background-color 0.3s, transform 0.3s;
+  text-decoration: none;
 }
 
 .cta-button:hover {
@@ -275,16 +242,8 @@ blockquote {
     margin: 0 auto;
   }
   
-  .journey-timeline::before {
-    left: 20px;
-  }
-  
-  .timeline-item {
-    padding-left: 50px;
-  }
-  
-  .timeline-marker {
-    left: 14px;
+  .expertise-grid {
+    grid-template-columns: 1fr;
   }
   
   .main-nav {
