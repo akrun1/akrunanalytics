@@ -2,7 +2,7 @@
 // Use this when you can't access the real API or during development
 
 export const getMockNews = () => {
-  const today = new Date().toLocaleDateString('en-US', {
+  const today = new Date('2025-02-26').toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric'
@@ -11,24 +11,24 @@ export const getMockNews = () => {
   return [
     {
       id: 'news-1',
-      title: 'Apple Introduces New AI Features for iOS 18',
-      summary: 'The latest iOS update brings advanced AI capabilities to iPhones, focusing on privacy and user experience.',
+      title: 'Meet Framework Desktop, A Monster Mini PC Powered By AMD Ryzen AI Max',
+      summary: 'Framework is bringing its consumer-friendly, DIY approach to the desktop PC space. It worked with AMD to launch a mini PC with AMD\'s monster Strix Halo processors.',
       date: today,
-      url: 'https://techcrunch.com/category/apple/'
+      url: 'https://www.forbes.com/sites/jasonevangelho/2025/02/26/framework-desktop-amd-ryzen-strix/'
     },
     {
       id: 'news-2',
-      title: 'Google\'s Latest Algorithm Update Focuses on AI-Generated Content',
-      summary: 'Google has announced major changes to its search algorithm, prioritizing high-quality content regardless of whether it was created by humans or AI.',
+      title: 'Claude: Everything you need to know about Anthropic\'s AI',
+      summary: 'Anthropic\'s powerful family of generative AI models called Claude rival OpenAI\'s ChatGPT and Google\'s Gemini.',
       date: today,
-      url: 'https://techcrunch.com/category/google/'
+      url: 'https://techcrunch.com/category/artificial-intelligence/'
     },
     {
       id: 'news-3',
-      title: 'Microsoft Unveils Next-Generation Azure AI Infrastructure',
-      summary: 'The new Azure AI platform offers significantly improved performance for large language models and computer vision applications.',
+      title: 'AI Tools Revolutionizing Software Development in 2025',
+      summary: 'How AI-powered coding assistants are transforming the way developers work and boosting productivity.',
       date: today,
-      url: 'https://techcrunch.com/category/microsoft/'
+      url: 'https://techcrunch.com/category/artificial-intelligence/'
     }
   ];
 };

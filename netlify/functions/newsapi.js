@@ -2,7 +2,7 @@ const axios = require('axios');
 
 // Mock news data for when the API key isn't available
 const getMockNews = () => {
-  const today = new Date().toLocaleDateString('en-US', {
+  const today = new Date('2025-02-26').toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric'
@@ -13,34 +13,34 @@ const getMockNews = () => {
     totalResults: 3,
     articles: [
       {
-        source: { id: "mock-source", name: "Tech News" },
-        author: "Tech Reporter",
-        title: "Apple Introduces New AI Features for iOS 18",
-        description: "The latest iOS update brings advanced AI capabilities to iPhones, focusing on privacy and user experience.",
-        url: "https://techcrunch.com/category/apple/",
-        urlToImage: "https://techcrunch.com/wp-content/uploads/2021/01/apple-ios-14.jpg",
-        publishedAt: new Date().toISOString(),
-        content: "Apple's latest iOS update includes new AI features that enhance user privacy and experience."
+        source: { id: "forbes", name: "Forbes" },
+        author: "Jason Evangelho",
+        title: "Meet Framework Desktop, A Monster Mini PC Powered By AMD Ryzen AI Max",
+        description: "Framework is bringing its consumer-friendly, DIY approach to the desktop PC space. It worked with AMD to launch a mini PC with AMD's monster Strix Halo processors.",
+        url: "https://www.forbes.com/sites/jasonevangelho/2025/02/26/framework-desktop-amd-ryzen-strix/",
+        urlToImage: "https://imageio.forbes.com/specials-images/imageserve/65dbcf7c9ed8b8c189af1d46/0x0.jpg",
+        publishedAt: new Date('2025-02-26').toISOString(),
+        content: "Framework is bringing its consumer-friendly, DIY approach to the desktop PC space with the introduction of the Framework Desktop with AMD's latest Ryzen AI Max processors."
       },
       {
-        source: { id: "mock-source", name: "Tech News" },
+        source: { id: "tech-crunch", name: "TechCrunch" },
         author: "Tech Reporter",
-        title: "Google's Latest Algorithm Update Focuses on AI-Generated Content",
-        description: "Google has announced major changes to its search algorithm, prioritizing high-quality content regardless of whether it was created by humans or AI.",
-        url: "https://techcrunch.com/category/google/",
-        urlToImage: "https://techcrunch.com/wp-content/uploads/2021/01/google-search.jpg",
-        publishedAt: new Date().toISOString(),
-        content: "Google's new algorithm update will prioritize high-quality content, whether created by humans or AI."
+        title: "Claude: Everything you need to know about Anthropic's AI",
+        description: "Anthropic, one of the world's largest AI vendors, has a powerful family of generative AI models called Claude that rival OpenAI's ChatGPT and Google's Gemini.",
+        url: "https://techcrunch.com/category/artificial-intelligence/",
+        urlToImage: "https://techcrunch.com/wp-content/uploads/2023/07/anthropic-claude.jpg",
+        publishedAt: new Date('2025-02-26').toISOString(),
+        content: "Anthropic's Claude AI models offer longer context windows, improved reasoning capabilities, and better instruction-following compared to competitors."
       },
       {
-        source: { id: "mock-source", name: "Tech News" },
-        author: "Tech Reporter",
-        title: "Microsoft Unveils Next-Generation Azure AI Infrastructure",
-        description: "The new Azure AI platform offers significantly improved performance for large language models and computer vision applications.",
-        url: "https://techcrunch.com/category/microsoft/",
-        urlToImage: "https://techcrunch.com/wp-content/uploads/2021/01/microsoft-azure.jpg",
-        publishedAt: new Date().toISOString(),
-        content: "Microsoft's new Azure AI infrastructure provides better performance for AI workloads."
+        source: { id: "tech-crunch", name: "TechCrunch" },
+        author: "AI Correspondent",
+        title: "AI Tools Revolutionizing Software Development in 2025",
+        description: "How AI-powered coding assistants are transforming the way developers work and boosting productivity.",
+        url: "https://techcrunch.com/category/artificial-intelligence/",
+        urlToImage: "https://techcrunch.com/wp-content/uploads/2025/02/ai-coding-tools.jpg",
+        publishedAt: new Date('2025-02-26').toISOString(),
+        content: "AI coding assistants are transforming software development with advanced capabilities like auto-completing code, generating test cases, and fixing bugs automatically."
       }
     ]
   };

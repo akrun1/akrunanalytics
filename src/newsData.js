@@ -1,5 +1,16 @@
 const newsData = [
   {
+    id: 'framework-desktop-amd',
+    title: 'Meet Framework Desktop, A Monster Mini PC Powered By AMD Ryzen AI Max',
+    summary: 'Framework is bringing its consumer-friendly, DIY approach to the desktop PC space. It worked with AMD to launch a mini PC with AMD\'s monster Strix Halo processors.',
+    content: `Framework is bringing its consumer-friendly, DIY approach to the desktop PC space with the introduction of the Framework Desktop. The company has partnered with AMD to launch a powerful mini PC based on AMD's Strix Halo processors, also known as Ryzen AI Max.
+
+The Framework Desktop takes the same modular, user-repairable philosophy that made Framework laptops popular and applies it to desktop computing. Users can easily upgrade components, replace parts, and customize their setup without specialized tools or expertise.
+
+This mini PC packs impressive power into its compact form factor, with options for AMD's latest Ryzen AI processors that deliver enhanced AI capabilities for content creation, gaming, and productivity tasks. The system also includes options for expansion cards, allowing users to add the specific ports and connectivity they need.`,
+    date: 'Feb 26, 2025'
+  },
+  {
     id: 'claude-anthropic-ai',
     title: 'Claude: Everything you need to know about Anthropic\'s AI',
     summary: 'Anthropic, one of the world\'s largest AI vendors, has a powerful family of generative AI models called Claude.',
@@ -9,19 +20,6 @@ Claude's key features include longer context windows (allowing it to process mor
 
 The latest model, Claude 3, comes in three versions: Haiku (fastest), Sonnet (balanced), and Opus (most powerful). Claude has shown impressive performance on benchmarks and real-world tasks like coding, research, and content creation.`,
     date: 'Feb 26, 2025'
-  },
-  {
-    id: 'chatgpt-pricing',
-    title: 'How much does ChatGPT cost? Everything you need to know about OpenAI\'s pricing plans',
-    summary: 'OpenAI offers an array of plans for ChatGPT, both paid and free. 2024 TechCrunch. All rights reserved.',
-    content: `OpenAI offers an array of plans for ChatGPT, including both free and paid options to suit different user needs. The free tier provides access to GPT-3.5 with standard response times and is suitable for casual users. For more demanding applications, OpenAI offers ChatGPT Plus at $20/month, which includes priority access to new features, faster response times, and access to GPT-4.
-
-For enterprise users, OpenAI has developed ChatGPT Enterprise, which adds enhanced security, longer context windows, advanced data analysis, and customization options. Pricing for this tier is customized based on organizational needs.
-
-OpenAI also offers a Teams plan at $30/user/month designed for small team collaboration with shared workspaces and admin controls. Additionally, developers can access the ChatGPT API with usage-based pricing, starting at $0.002 per 1K tokens for GPT-3.5-Turbo.
-
-Each plan offers specific advantages depending on usage requirements, from casual experimentation to enterprise-grade applications requiring advanced security and customization.`,
-    date: 'Feb 25, 2025'
   }
 ];
 
