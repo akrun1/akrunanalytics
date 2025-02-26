@@ -9,37 +9,57 @@ const getMockNews = () => {
   
   return {
     status: "ok",
-    totalResults: 3,
+    totalResults: 5,
     articles: [
       {
-        source: { id: "forbes", name: "Forbes" },
-        author: "Jason Evangelho",
-        title: "Meet Framework Desktop, A Monster Mini PC Powered By AMD Ryzen AI Max",
-        description: "Framework is bringing its consumer-friendly, DIY approach to the desktop PC space. It worked with AMD to launch a mini PC with AMD's monster Strix Halo processors.",
-        url: "https://www.forbes.com/sites/jasonevangelho/2025/02/26/framework-desktop-amd-ryzen-strix/",
-        urlToImage: "https://imageio.forbes.com/specials-images/imageserve/65dbcf7c9ed8b8c189af1d46/0x0.jpg",
-        publishedAt: "2025-02-26T12:00:00Z",
-        content: "Framework is bringing its consumer-friendly, DIY approach to the desktop PC space with the introduction of the Framework Desktop with AMD's latest Ryzen AI Max processors."
+        source: { id: "tech-crunch", name: "TechCrunch" },
+        author: "Mobility Reporter",
+        title: "Avride's sidewalk delivery bots land in Japan",
+        description: "Avride sidewalk bots will start delivering restaurant orders and groceries in central Tokyo this week.",
+        url: "https://techcrunch.com/category/transportation/",
+        urlToImage: "https://techcrunch.com/wp-content/uploads/2025/02/avride-delivery-bot.jpg",
+        publishedAt: "2025-02-26T14:30:00Z",
+        content: "Avride's autonomous sidewalk robots are expanding to Japan, starting with central Tokyo this week. The bots will deliver food and grocery orders, navigating crowded urban environments safely."
       },
       {
-        source: { id: "tech-crunch", name: "TechCrunch" },
-        author: "Tech Reporter",
-        title: "Claude: Everything you need to know about Anthropic's AI",
-        description: "Anthropic, one of the world's largest AI vendors, has a powerful family of generative AI models called Claude that rival OpenAI's ChatGPT and Google's Gemini.",
-        url: "https://techcrunch.com/category/artificial-intelligence/",
-        urlToImage: "https://techcrunch.com/wp-content/uploads/2023/07/anthropic-claude.jpg",
-        publishedAt: "2025-02-26T10:30:00Z",
-        content: "Anthropic's Claude AI models offer longer context windows, improved reasoning capabilities, and better instruction-following compared to competitors."
+        source: { id: "wired", name: "Wired" },
+        author: "Privacy Correspondent",
+        title: "These alternatives to popular apps can help reclaim your online life from billionaires and surveillance",
+        description: "Not every app or service wants to monetize your personal data. Here are some of our favorite alternatives.",
+        url: "https://www.wired.com/story/privacy-alternatives-2025/",
+        urlToImage: "https://wired.com/wp-content/uploads/2025/02/privacy-apps.jpg",
+        publishedAt: "2025-02-26T12:45:00Z",
+        content: "As tech companies continue to collect vast amounts of personal data, more users are seeking alternatives that respect privacy and don't turn users into products."
       },
       {
-        source: { id: "tech-crunch", name: "TechCrunch" },
-        author: "AI Correspondent",
-        title: "AI Tools Revolutionizing Software Development in 2025",
-        description: "How AI-powered coding assistants are transforming the way developers work and boosting productivity.",
-        url: "https://techcrunch.com/category/artificial-intelligence/",
-        urlToImage: "https://techcrunch.com/wp-content/uploads/2025/02/ai-coding-tools.jpg",
-        publishedAt: "2025-02-26T09:15:00Z",
-        content: "AI coding assistants are transforming software development with advanced capabilities like auto-completing code, generating test cases, and fixing bugs automatically."
+        source: { id: "cnn", name: "CNN" },
+        author: "Business Reporter",
+        title: "Here are all the tech companies rolling back DEI or still committed to it — so far",
+        description: "Companies around America have started cutting DEI programs and eliminating DEI commitments from public statements.",
+        url: "https://www.cnn.com/business/tech-dei-programs-2025/",
+        urlToImage: "https://cnn.com/business/2025/02/dei-tech-companies.jpg",
+        publishedAt: "2025-02-26T11:15:00Z",
+        content: "Following recent court decisions and political pressures, major tech companies are reexamining their diversity, equity and inclusion commitments, with some scaling back programs while others are doubling down."
+      },
+      {
+        source: { id: "ars-technica", name: "Ars Technica" },
+        author: "Jon Brodkin",
+        title: "Google's free Gemini Code Assist arrives with sky-high usage limits - Ars Technica",
+        description: "Gemini Code Assist lets you do 90 times more than competing tools.",
+        url: "https://arstechnica.com/information-technology/2025/02/google-gemini-code-assist/",
+        urlToImage: "https://cdn.arstechnica.net/wp-content/uploads/2025/02/gemini-code-assist-760x380.jpg",
+        publishedAt: "2025-02-26T09:30:00Z",
+        content: "Google has released Gemini Code Assist with generous free tier limits that dwarf competing AI coding assistants, raising questions about how long these limits will remain in place."
+      },
+      {
+        source: { id: "cnn", name: "CNN" },
+        author: "Space Correspondent",
+        title: "This asteroid-hunting company could make history with its first deep-space mission. The CEO is 'terrified' - CNN",
+        description: "No company has ever achieved what asteroid mining startup AstroForge is about to set out to do. Success is anything but guaranteed.",
+        url: "https://www.cnn.com/2025/02/26/tech/astroforge-asteroid-mission-launch-scn/index.html",
+        urlToImage: "https://cdn.cnn.com/cnnnext/dam/assets/250226100028-astroforge-asteroid-mission-super-tease.jpg",
+        publishedAt: "2025-02-26T08:15:00Z",
+        content: "AstroForge is about to launch the first commercial mission to identify and potentially mine valuable resources from an asteroid, a feat that has never been accomplished by a private company before."
       }
     ]
   };
@@ -47,7 +67,7 @@ const getMockNews = () => {
 
 exports.handler = async function(event) {
   // Log environment info for debugging
-  console.log('Function Version: 2025-02-26-v3');
+  console.log('Function Version: 2025-02-26-v4');
   console.log('Environment variables available:', Object.keys(process.env).filter(key => !key.includes('KEY') && !key.includes('SECRET')));
   console.log('API keys present:', {
     NEWS_API_KEY: process.env.NEWS_API_KEY ? 'Present' : 'Missing',
@@ -73,7 +93,7 @@ exports.handler = async function(event) {
     }
     
     console.log('Fetching news with API key (first 4 chars):', API_KEY.substring(0, 4) + '...');
-    const url = `https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=3&apiKey=${API_KEY}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=5&apiKey=${API_KEY}`;
     
     console.log('Requesting from URL:', url.replace(API_KEY, '[REDACTED]'));
     const response = await axios.get(url);
