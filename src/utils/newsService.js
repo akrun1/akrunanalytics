@@ -2,11 +2,8 @@
 // Use this when you can't access the real API or during development
 
 export const getMockNews = () => {
-  const today = new Date('2025-02-26').toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  });
+  // Explicitly set the date to February 26, 2025
+  const today = "February 26, 2025";
   
   return [
     {

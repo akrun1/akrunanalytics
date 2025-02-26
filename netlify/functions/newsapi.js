@@ -2,11 +2,8 @@ const axios = require('axios');
 
 // Mock news data for when the API key isn't available
 const getMockNews = () => {
-  const today = new Date('2025-02-26').toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  });
+  // Explicitly set the date to February 26, 2025
+  const today = "February 26, 2025";
   
   return {
     status: "ok",
@@ -19,7 +16,7 @@ const getMockNews = () => {
         description: "Framework is bringing its consumer-friendly, DIY approach to the desktop PC space. It worked with AMD to launch a mini PC with AMD's monster Strix Halo processors.",
         url: "https://www.forbes.com/sites/jasonevangelho/2025/02/26/framework-desktop-amd-ryzen-strix/",
         urlToImage: "https://imageio.forbes.com/specials-images/imageserve/65dbcf7c9ed8b8c189af1d46/0x0.jpg",
-        publishedAt: new Date('2025-02-26').toISOString(),
+        publishedAt: "2025-02-26T12:00:00Z",
         content: "Framework is bringing its consumer-friendly, DIY approach to the desktop PC space with the introduction of the Framework Desktop with AMD's latest Ryzen AI Max processors."
       },
       {
@@ -29,7 +26,7 @@ const getMockNews = () => {
         description: "Anthropic, one of the world's largest AI vendors, has a powerful family of generative AI models called Claude that rival OpenAI's ChatGPT and Google's Gemini.",
         url: "https://techcrunch.com/category/artificial-intelligence/",
         urlToImage: "https://techcrunch.com/wp-content/uploads/2023/07/anthropic-claude.jpg",
-        publishedAt: new Date('2025-02-26').toISOString(),
+        publishedAt: "2025-02-26T10:30:00Z",
         content: "Anthropic's Claude AI models offer longer context windows, improved reasoning capabilities, and better instruction-following compared to competitors."
       },
       {
@@ -39,7 +36,7 @@ const getMockNews = () => {
         description: "How AI-powered coding assistants are transforming the way developers work and boosting productivity.",
         url: "https://techcrunch.com/category/artificial-intelligence/",
         urlToImage: "https://techcrunch.com/wp-content/uploads/2025/02/ai-coding-tools.jpg",
-        publishedAt: new Date('2025-02-26').toISOString(),
+        publishedAt: "2025-02-26T09:15:00Z",
         content: "AI coding assistants are transforming software development with advanced capabilities like auto-completing code, generating test cases, and fixing bugs automatically."
       }
     ]

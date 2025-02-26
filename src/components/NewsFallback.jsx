@@ -1,12 +1,8 @@
 import React from 'react';
 
 const NewsFallback = () => {
-  // Get current date formatted as Feb 26, 2025
-  const today = new Date().toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  });
+  // Explicitly set the date to February 26, 2025 instead of using dynamic date
+  const today = "February 26, 2025";
   
   const staticNews = [
     {

@@ -8,7 +8,7 @@ const newsData = [
 The Framework Desktop takes the same modular, user-repairable philosophy that made Framework laptops popular and applies it to desktop computing. Users can easily upgrade components, replace parts, and customize their setup without specialized tools or expertise.
 
 This mini PC packs impressive power into its compact form factor, with options for AMD's latest Ryzen AI processors that deliver enhanced AI capabilities for content creation, gaming, and productivity tasks. The system also includes options for expansion cards, allowing users to add the specific ports and connectivity they need.`,
-    date: 'Feb 26, 2025'
+    date: 'February 26, 2025'
   },
   {
     id: 'claude-anthropic-ai',
@@ -19,7 +19,7 @@ This mini PC packs impressive power into its compact form factor, with options f
 Claude's key features include longer context windows (allowing it to process more text at once), improved reasoning capabilities, reduced hallucinations, and better instruction-following. Claude is available through a web interface, API, and various partnership integrations with companies like Amazon Web Services, Google Cloud, Notion, and Zoom.
 
 The latest model, Claude 3, comes in three versions: Haiku (fastest), Sonnet (balanced), and Opus (most powerful). Claude has shown impressive performance on benchmarks and real-world tasks like coding, research, and content creation.`,
-    date: 'Feb 26, 2025'
+    date: 'February 26, 2025'
   }
 ];
 
