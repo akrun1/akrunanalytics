@@ -5,6 +5,8 @@ const getMockNews = () => {
   // Explicitly set the date to February 26, 2025
   const today = "February 26, 2025";
   
+  console.log('Using mock news data with date:', today);
+  
   return {
     status: "ok",
     totalResults: 3,
@@ -45,8 +47,12 @@ const getMockNews = () => {
 
 exports.handler = async function(event) {
   // Log environment info for debugging
-  console.log('Function Version: 2025-02-26-v2');
+  console.log('Function Version: 2025-02-26-v3');
   console.log('Environment variables available:', Object.keys(process.env).filter(key => !key.includes('KEY') && !key.includes('SECRET')));
+  console.log('API keys present:', {
+    NEWS_API_KEY: process.env.NEWS_API_KEY ? 'Present' : 'Missing',
+    VITE_NEWS_API_KEY: process.env.VITE_NEWS_API_KEY ? 'Present' : 'Missing'
+  });
   
   try {
     // Get API key from environment variables - try both formats
@@ -74,6 +80,13 @@ exports.handler = async function(event) {
     
     console.log('NewsAPI Response Status:', response.status);
     console.log('NewsAPI Articles Found:', response.data?.articles?.length || 0);
+    
+    // Force the date to be February 26, 2025 for all articles
+    if (response.data && response.data.articles) {
+      response.data.articles.forEach(article => {
+        article.publishedAt = "2025-02-26T12:00:00Z";
+      });
+    }
     
     return {
       statusCode: 200,

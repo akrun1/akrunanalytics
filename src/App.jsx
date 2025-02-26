@@ -68,11 +68,7 @@ function App() {
               title: article.title,
               summary: article.description || 'Click to read more about this story.',
               content: article.content,
-              date: new Date(article.publishedAt).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric'
-              }),
+              date: "February 26, 2025", // Hardcoded date instead of using dynamic date
               url: article.url
             }));
             
