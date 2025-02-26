@@ -190,6 +190,33 @@
   color: #ddd;
 }
 
+.credential h3 {
+  color: #007bff;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.publications-list {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+
+.publications-list li {
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  color: #ddd;
+}
+
+.publications-list em {
+  font-style: italic;
+  color: #007bff;
+}
+
+.publications-list sup {
+  font-size: 0.75em;
+  vertical-align: super;
+}
+
 /* CTA Section */
 .cta-section {
   text-align: center;
