@@ -4,6 +4,6 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "https://akrun-analytics.herokuapp.com/api/:splat"
+  to = "https://api.akrunanalyticscorp.com/api/:splat"
   status = 200
   force = true
