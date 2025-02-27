@@ -219,6 +219,7 @@
   height: 100%;
   background: linear-gradient(to right, #3498db, #9b59b6);
   border-radius: 10px;
+  transition: width 1s ease-in-out;
 }
 
 .indicator-value {
@@ -256,6 +257,40 @@
   margin-bottom: 0;
 }
 
+.loading-spinner {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #007bff;
+  animation: spin 1s ease-in-out infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.gender-inequality-map {
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.region-card {
+  transition: all 0.3s ease;
+}
+
+.region-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
 @media (max-width: 768px) {
   .map-container {
     height: auto;
@@ -266,5 +301,14 @@
   
   .region {
     height: 60px;
+  }
+  
+  .region-grid {
+    flex-direction: column;
+  }
+  
+  .region-card {
+    width: 100%;
+    max-width: 100%;
   }
 }

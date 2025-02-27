@@ -33,17 +33,16 @@ function Analytics() {
                 to="/analytics-dashboard" 
                 className="showcase-link"
                 style={{
-                  backgroundColor: '#0d6efd',
-                  color: 'white',
+                  backgroundColor: '#ffffff',
+                  color: '#0d6efd',
                   fontWeight: 'bold',
-                  fontSize: '16px',
+                  fontSize: '18px',
                   padding: '12px 20px',
                   borderRadius: '8px',
-                  border: '2px solid #0056b3',
-                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                  border: '3px solid #0d6efd',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  boxShadow: '0 4px 6px rgba(0,0,0,0.2)',
+                  boxShadow: 'none',
                   textDecoration: 'none',
                   marginTop: '10px'
                 }}
@@ -183,11 +182,32 @@ function Analytics() {
           </section>
           
           <div className="cta-section">
-            <h2>Ready to Transform Your Data?</h2>
-            <p>
+            <h2 style={{ fontSize: '36px', fontWeight: 'bold', color: 'white', marginBottom: '20px', textShadow: '1px 1px 3px rgba(0,0,0,0.3)' }}>Ready to Transform Your Data?</h2>
+            <p style={{ fontSize: '18px', maxWidth: '700px', margin: '0 auto 25px', color: '#e0e0e0', lineHeight: '1.6' }}>
               Discover how our analytics solutions can drive growth and innovation for your organization.
             </p>
-            <Link to="/#contact" className="cta-button">Contact Us</Link>
+            <a 
+              href="/#contact" 
+              className="cta-button" 
+              style={{ 
+                display: 'inline-block', 
+                animation: 'pulse 2s infinite',
+                fontSize: '20px',
+                padding: '15px 35px',
+                backgroundColor: '#ff6b00',
+                color: 'white',
+                fontWeight: 'bold',
+                textDecoration: 'none',
+                borderRadius: '8px',
+                boxShadow: '0 4px 15px rgba(255, 107, 0, 0.5)'
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '/#contact';
+              }}
+            >
+              CONTACT US
+            </a>
           </div>
         </div>
       </main>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import BitcoinPredictor from './components/analytics-modules/bitcoin-prediction/BitcoinPredictor';
-import CountryClustering from './components/analytics-modules/country-clustering/CountryClustering';
-import GenderInequalityMap from './components/analytics-modules/gender-inequality/GenderInequalityMap';
+import BitcoinPredictor from '../analytics-modules/bitcoin-prediction/BitcoinPredictor';
+import CountryClustering from '../analytics-modules/country-clustering/CountryClustering';
+import GenderInequalityMap from '../analytics-modules/gender-inequality/GenderInequalityMap';
 import './AnalyticsDashboard.css';
 
 const AnalyticsDashboard = () => {

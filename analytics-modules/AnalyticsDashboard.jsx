@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import BitcoinPredictor from './bitcoin-prediction/BitcoinPredictor';
 import CountryClustering from './country-clustering/CountryClustering';
 import GenderInequalityMap from './gender-inequality/GenderInequalityMap';
@@ -12,18 +12,11 @@ const AnalyticsDashboard = () => {
     window.location.href = '/#contact';
   };
   
-  const renderActiveTab = () => {
-    // Remove delayed mounting logic to ensure visualizations load immediately
-    switch (activeTab) {
-      case 'bitcoin':
-        return <BitcoinPredictor />;
-      case 'clustering':
-        return <CountryClustering />;
-      case 'inequality':
-        return <GenderInequalityMap />;
-      default:
-        return <BitcoinPredictor />;
-    }
+  // Preload all components to ensure they're rendered immediately
+  const components = {
+    bitcoin: <BitcoinPredictor />,
+    clustering: <CountryClustering />,
+    inequality: <GenderInequalityMap />
   };
   
   return (
@@ -54,7 +47,7 @@ const AnalyticsDashboard = () => {
           className={`tab-button ${activeTab === 'clustering' ? 'active' : ''}`}
           onClick={() => setActiveTab('clustering')}
         >
-          <span className="tab-icon">🌐</span>
+          <span className="tab-icon">🌎</span>
           Country Clustering
         </button>
         
@@ -62,15 +55,13 @@ const AnalyticsDashboard = () => {
           className={`tab-button ${activeTab === 'inequality' ? 'active' : ''}`}
           onClick={() => setActiveTab('inequality')}
         >
-          <span className="tab-icon">⚖️</span>
+          <span className="tab-icon">📊</span>
           Gender Inequality Map
         </button>
       </div>
       
-      <div className="tab-content">
-        <div className="visualization-content">
-          {renderActiveTab()}
-        </div>
+      <div className="visualization-container">
+        {components[activeTab]}
       </div>
       
       <div className="dashboard-footer">

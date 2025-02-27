@@ -170,23 +170,46 @@ h2 {
   background-color: #1a1a1a;
   border-radius: 5px;
   margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid #333;
 }
 
 .cta-button {
   display: inline-block;
-  background: #007bff;
-  color: #fff;
-  padding: 0.75rem 2rem;
-  border-radius: 4px;
+  background-color: #ff6b00;  
+  color: white;
+  padding: 15px 30px;
+  font-size: 18px;
   font-weight: bold;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.5);  
+  transition: all 0.3s ease;
+  cursor: pointer;
   text-transform: uppercase;
-  margin-top: 1.5rem;
-  transition: background-color 0.3s, transform 0.3s;
+  letter-spacing: 1px;
 }
 
 .cta-button:hover {
-  background-color: #0056b3;
+  background-color: #ff8800;
   transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(255, 107, 0, 0.7);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.5);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(255, 107, 0, 0.7);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.5);
+  }
 }
 
 .footer {
