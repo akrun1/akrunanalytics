@@ -391,14 +391,40 @@ img {
   
   .header .container {
     flex-direction: column;
+    align-items: center;
+  }
+  
+  .logo {
+    margin-bottom: 1rem;
+  }
+  
+  .main-nav {
+    width: 100%;
   }
   
   .main-nav ul {
     margin-top: 1rem;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
   }
   
   .main-nav li {
-    margin: 0 0.7rem;
+    margin: 0.5rem 0;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .main-nav a {
+    display: block;
+    padding: 0.5rem;
+    width: 100%;
+    background-color: #1a1a1a;
+    border-radius: 4px;
+  }
+  
+  .main-nav a:hover {
+    background-color: #333;
   }
 }
 
