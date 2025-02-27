@@ -9,7 +9,12 @@ import axios from 'axios'
 function App() {
   const [newsItems, setNewsItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
   useEffect(() => {
     const fetchNews = async () => {
       try {
@@ -63,12 +68,17 @@ function App() {
               console.log('First article title:', response.data.articles[0].title);
             }
             
+            // Get current date for news items
+            const today = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = today.toLocaleDateString('en-US', options);
+            
             const formattedNews = response.data.articles.map((article, index) => ({
               id: `news-${index}`,
               title: article.title,
               summary: article.description || 'Click to read more about this story.',
               content: article.content,
-              date: "February 26, 2025", // Hardcoded date instead of using dynamic date
+              date: formattedDate, // Use current date instead of hardcoded date
               url: article.url
             }));
             
@@ -117,7 +127,12 @@ function App() {
       <header className="header">
         <div className="container">
           <Link to="/" className="logo">akrun Analytics</Link>
-          <nav className="main-nav">
+          <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <nav className={`main-nav ${mobileMenuOpen ? 'open' : ''}`}>
             <ul>
               <li><a href="#services">Services</a></li>
               <li><Link to="/analytics">Analytics</Link></li>
