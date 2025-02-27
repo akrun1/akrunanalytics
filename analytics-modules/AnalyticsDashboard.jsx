@@ -67,7 +67,9 @@ const AnalyticsDashboard = () => {
       </div>
       
       <div className="tab-content">
-        {renderActiveTab()}
+        <div className="visualization-content">
+          {renderActiveTab()}
+        </div>
       </div>
       
       <div className="dashboard-footer">
