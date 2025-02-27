@@ -1,11 +1,12 @@
-/* Emergency CSS fixes */
+/* Emergency CSS fixes to maintain styling similar to the original App.css */
+
 /* Base styles to ensure content is always visible */
 html, body {
   background-color: #121212 !important;
-  color: #ffffff !important;
   font-family: 'Inter', 'Montserrat', 'Poppins', sans-serif !important;
   margin: 0 !important;
   padding: 0 !important;
+  color: #e0e0e0 !important;
 }
 
 #root {
@@ -14,29 +15,78 @@ html, body {
   flex-direction: column !important;
 }
 
-/* Make sure headers are visible */
+/* Make sure headers are visible with original styling */
 h1, h2, h3, h4, h5, h6 {
   color: #ffffff !important;
 }
 
-/* Link styling */
+h1 {
+  font-size: 3rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(45deg, #007bff, #00c6ff) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  text-shadow: 0 2px 10px rgba(0, 123, 255, 0.2) !important;
+}
+
+/* Restore original link styling */
 a {
-  color: #646cff !important;
+  color: #007bff !important;
   text-decoration: none !important;
+  transition: color 0.3s !important;
 }
 
 a:hover {
-  color: #747bff !important;
+  color: #0056b3 !important;
   text-decoration: underline !important;
 }
 
-/* Service card styles */
+/* Restore original button styling */
+.button,
+button,
+.btn {
+  display: inline-block !important;
+  background: #007bff !important;
+  color: #fff !important;
+  padding: 0.9rem 2rem !important;
+  border: none !important;
+  border-radius: 50px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  font-size: 1rem !important;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.button:hover,
+button:hover,
+.btn:hover {
+  background: #0056b3 !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 14px rgba(0, 123, 255, 0.4) !important;
+}
+
+/* Primary button style */
+.button.primary,
+.primary {
+  background-color: #007bff !important;
+  color: #fff !important;
+}
+
+/* Service card styles - maintain original styling */
 .service-card {
   background-color: #1a1a1a !important;
   color: #fff !important;
   border: 1px solid #333 !important;
-  padding: 1rem !important;
   border-radius: 8px !important;
+  padding: 1.5rem !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+  transition: transform 0.3s, box-shadow 0.3s !important;
   margin-bottom: 1rem !important;
 }
 
@@ -45,7 +95,74 @@ a:hover {
 }
 
 .service-card h3 {
-  color: #646cff !important;
+  color: #007bff !important;
+}
+
+/* Navigation styling */
+.main-nav a,
+.nav-link,
+.nav-item a,
+.menu-item a,
+.navbar a {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+}
+
+.main-nav a:hover,
+.nav-link:hover {
+  color: #007bff !important;
+}
+
+/* Component containers */
+.bitcoin-predictor-container,
+.country-clustering-container,
+.gender-inequality-map-container {
+  background-color: #1a1a1a !important;
+  border: 1px solid #333 !important;
+  border-radius: 8px !important;
+  padding: 1.5rem !important;
+  margin: 1rem 0 !important;
+}
+
+/* Game component styling */
+.games {
+  margin-bottom: 2rem !important;
+  padding: 1rem !important;
+  background-color: #1a1a1a !important;
+  border-radius: 5px !important;
+  border-left: 4px solid #4CAF50 !important;
+}
+
+.games h3 {
+  color: #4CAF50 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Hero section */
+.hero {
+  padding: 2rem 0 !important;
+  color: #fff !important;
+  background-color: #111 !important;
+  text-align: center !important;
+}
+
+.hero p {
+  font-size: 1.2rem !important;
+  margin-bottom: 2rem !important;
+  color: #e0e0e0 !important;
+}
+
+/* GET STARTED button specific */
+a[href="#contact"].button.primary {
+  display: inline-block !important;
+  background: #007bff !important;
+  color: #fff !important;
+  padding: 0.9rem 2rem !important;
+  border: none !important;
+  border-radius: 50px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
 }
 
 /* Navbar styles */
@@ -80,5 +197,82 @@ a:hover {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
+  margin: 1rem 0 !important;
+}
+
+/* Fix button text color */
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+.btn {
+  color: #ffffff !important;
+  font-weight: bold !important;
+}
+
+/* Specific fix for Get Started button */
+a.button-primary,
+button.button-primary,
+.get-started-btn,
+a[href*="get-started"],
+a:has(> span:contains("Get Started")),
+a:contains("Get Started") {
+  color: #ffffff !important;
+  font-weight: bold !important;
+  background-color: #0066ff !important;
+  border-radius: 4px !important;
+  padding: 0.75rem 1.5rem !important;
+  text-align: center !important;
+  display: inline-block !important;
+}
+
+/* Fix for Play Snake Game link */
+a[href*="snake-game"],
+a:contains("Snake Game"),
+a:has(> span:contains("Snake Game")) {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  padding: 0.5rem 1rem !important;
+  background-color: #2a2a2a !important;
+  border-radius: 4px !important;
+  display: inline-block !important;
+  margin: 0.25rem !important;
+}
+
+/* Fix for Explore Analytics Dashboard link */
+a[href*="analytics-dashboard"],
+a:contains("Analytics Dashboard"),
+a:has(> span:contains("Analytics Dashboard")) {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  padding: 0.5rem 1rem !important;
+  background-color: #2a2a2a !important;
+  border-radius: 4px !important;
+  display: inline-block !important;
+  margin: 0.25rem !important;
+}
+
+/* More specific styles for any buttons */
+a.nav-link,
+.nav-item a,
+.menu-item a,
+.navbar a {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+/* Fix for the visualization loading text */
+.visualization-loading,
+[data-testid="visualization-loading"],
+*:contains("Visualization loading") {
+  color: #ffffff !important;
+  background-color: #1a1a1a !important;
+  border: 1px solid #333 !important;
+  padding: 1rem !important;
+  text-align: center !important;
+  border-radius: 8px !important;
   margin: 1rem 0 !important;
 }
