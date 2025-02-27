@@ -187,7 +187,22 @@ function App() {
           {/* Snake Game */}
           <section className="games">
             <h3>Take a Break!</h3>
-            <Link to="/snake-game" className="game-link">🎮 Play Snake Game</Link>
+            <Link 
+              to="/snake-game" 
+              className="game-link" 
+              style={{
+                backgroundColor: '#4caf50', 
+                color: '#0000ff', 
+                fontWeight: 'bold',
+                padding: '10px 15px',
+                borderRadius: '8px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                textDecoration: 'none'
+              }}
+            >
+              🎮 Play Snake Game
+            </Link>
           </section>
 
           {/* Tech & Finance Updates */}

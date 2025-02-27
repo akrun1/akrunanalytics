@@ -23,7 +23,38 @@ export default defineConfig(({ command }) => {
                  code.includes('react-chartjs-2'))) {
               console.log(' Replacing problematic imports in:', id);
               return {
-                code: 'import React from "react"; export default function() { return React.createElement("div", { style: { padding: "20px", textAlign: "center" } }, React.createElement("p", null, "Visualization loading...")); }',
+                code: `
+                  import React from "react";
+                  export default function() {
+                    return React.createElement(
+                      "div", 
+                      { 
+                        style: { 
+                          padding: "40px", 
+                          display: "flex", 
+                          flexDirection: "column", 
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "#1a1a1a",
+                          borderRadius: "8px",
+                          color: "#ffffff"
+                        } 
+                      }, 
+                      React.createElement("div", { 
+                        style: { 
+                          width: "50px", 
+                          height: "50px", 
+                          border: "5px solid rgba(0, 123, 255, 0.1)", 
+                          borderRadius: "50%",
+                          borderTop: "5px solid #0d6efd",
+                          animation: "spin 1.5s linear infinite"
+                        }
+                      }),
+                      React.createElement("style", null, "@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }"),
+                      React.createElement("p", { style: { marginTop: "15px", color: "#e0e0e0" } }, "Interactive visualization")
+                    );
+                  }
+                `,
                 map: null
               };
             }

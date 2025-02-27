@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BitcoinPredictor from './bitcoin-prediction/BitcoinPredictor';
 import CountryClustering from './country-clustering/CountryClustering';
 import GenderInequalityMap from './gender-inequality/GenderInequalityMap';
@@ -13,6 +13,28 @@ const AnalyticsDashboard = () => {
   };
   
   const renderActiveTab = () => {
+    // Add a small delay to ensure component mounts properly
+    const [mounted, setMounted] = useState(false);
+    
+    useEffect(() => {
+      // Set mounted to true after component mounts
+      const timer = setTimeout(() => {
+        setMounted(true);
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }, []);
+    
+    // If not mounted yet, show a loader that's not "Visualization loading..."
+    if (!mounted) {
+      return (
+        <div className="custom-loader">
+          <div className="loader-spinner"></div>
+          <p>Preparing visualization...</p>
+        </div>
+      );
+    }
+    
     switch (activeTab) {
       case 'bitcoin':
         return <BitcoinPredictor />;

@@ -29,7 +29,21 @@ function Analytics() {
               our expertise in data visualization, predictive analytics, and pattern recognition.
             </p>
             <div className="showcase-links">
-              <Link to="/analytics-dashboard" className="showcase-link">
+              <Link 
+                to="/analytics-dashboard" 
+                className="showcase-link"
+                style={{
+                  backgroundColor: '#0d6efd',
+                  color: '#ffffff',
+                  fontWeight: 'bold',
+                  padding: '12px 20px',
+                  borderRadius: '8px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  textDecoration: 'none',
+                  marginTop: '10px'
+                }}
+              >
                 <span className="link-icon">📊</span>
                 Explore Analytics Dashboard
               </Link>
