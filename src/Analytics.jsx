@@ -22,6 +22,20 @@ function Analytics() {
         <div className="container">
           <h1>Analytics Solutions</h1>
           
+          <section className="showcase-section">
+            <h2>Interactive Analytics Showcase</h2>
+            <p>
+              Explore our interactive analytics modules to see data science in action. These demos showcase 
+              our expertise in data visualization, predictive analytics, and pattern recognition.
+            </p>
+            <div className="showcase-links">
+              <Link to="/analytics-dashboard" className="showcase-link">
+                <span className="link-icon">📊</span>
+                Explore Analytics Dashboard
+              </Link>
+            </div>
+          </section>
+          
           <section className="analytics-overview">
             <h2>Our Analytics Expertise</h2>
             <p>
@@ -155,7 +169,7 @@ function Analytics() {
             <p>
               Discover how our analytics solutions can drive growth and innovation for your organization.
             </p>
-            <Link to="/#contact" className="cta-button">Get Started</Link>
+            <Link to="/#contact" className="cta-button">Contact Us</Link>
           </div>
         </div>
       </main>

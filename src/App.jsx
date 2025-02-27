@@ -141,17 +141,38 @@ function App() {
           <section id="services" className="services">
             <h2 className="section-title">Our Services</h2>
             <div className="services-grid">
-              <div className="service-card">
-                <h3>Data Analytics</h3>
-                <p>Transform raw data into meaningful insights using advanced statistical analysis and visualization techniques.</p>
+              <div className="service-card" 
+                style={{
+                  backgroundColor: '#1a1a1a', 
+                  background: '#1a1a1a',
+                  color: '#fff',
+                  border: '1px solid #333',
+                  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)'
+                }}>
+                <h3 style={{color: 'var(--primary-color)'}}>Data Analytics</h3>
+                <p style={{color: '#e0e0e0'}}>Transform raw data into meaningful insights using advanced statistical analysis and visualization techniques.</p>
               </div>
-              <div className="service-card">
-                <h3>Machine Learning</h3>
-                <p>Implement cutting-edge ML solutions for prediction, classification, and pattern recognition.</p>
+              <div className="service-card"
+                style={{
+                  backgroundColor: '#1a1a1a', 
+                  background: '#1a1a1a',
+                  color: '#fff',
+                  border: '1px solid #333',
+                  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)'
+                }}>
+                <h3 style={{color: 'var(--primary-color)'}}>Machine Learning</h3>
+                <p style={{color: '#e0e0e0'}}>Implement cutting-edge ML solutions for prediction, classification, and pattern recognition.</p>
               </div>
-              <div className="service-card">
-                <h3>Business Intelligence</h3>
-                <p>Create interactive dashboards and reports to monitor KPIs and drive data-informed decisions.</p>
+              <div className="service-card"
+                style={{
+                  backgroundColor: '#1a1a1a', 
+                  background: '#1a1a1a',
+                  color: '#fff',
+                  border: '1px solid #333',
+                  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)'
+                }}>
+                <h3 style={{color: 'var(--primary-color)'}}>Business Intelligence</h3>
+                <p style={{color: '#e0e0e0'}}>Create interactive dashboards and reports to monitor KPIs and drive data-informed decisions.</p>
               </div>
             </div>
           </section>

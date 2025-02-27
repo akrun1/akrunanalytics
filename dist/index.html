@@ -10,8 +10,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-CxNFd8hv.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DbRd35oH.css">
+    
+    <!-- Custom styles -->
+    <style>
+      /* Very specific selector to override any other styling */
+      html body #root .app .main-content .left-content #services .services-grid .service-card {
+        background-color: #1a1a1a !important;
+        color: #fff !important;
+        border: 1px solid #333 !important;
+      }
+      
+      html body #root .app .main-content .left-content #services .services-grid .service-card p {
+        color: #e0e0e0 !important;
+      }
+    </style>
+    
+    <!-- Emergency fixes -->
+    <link rel="stylesheet" href="/fixes.css">
+    <script type="module" crossorigin src="/assets/index-Dn57bUa2.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CTpFAjVH.css">
   </head>
   <body>
     <div id="root"></div>

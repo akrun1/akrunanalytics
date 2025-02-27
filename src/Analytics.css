@@ -51,7 +51,7 @@
 
 .main-nav a:hover,
 .main-nav a.active {
-  color: #007bff;
+  color: #0d8aff;
 }
 
 .container {
@@ -195,6 +195,88 @@ h2 {
   padding: 1.5rem 0;
   text-align: center;
   border-top: 1px solid #333;
+}
+
+/* Showcase Section Styles */
+.showcase-section {
+  background-color: #1e2530;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: gradientBg 10s ease infinite;
+  background: linear-gradient(315deg, #2a2a72 0%, #1e2530 70%);
+  background-size: 200% 200%;
+}
+
+.showcase-section h2 {
+  margin-bottom: 1rem;
+  color: #fff;
+  font-size: 1.8rem;
+}
+
+.showcase-section p {
+  margin-bottom: 1.5rem;
+  color: #ccc;
+  line-height: 1.6;
+}
+
+.showcase-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.showcase-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background-color: #0d8aff;
+  color: white;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+
+.showcase-link:hover {
+  background-color: #0062cc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.showcase-link.secondary {
+  background-color: transparent;
+  border: 1px solid #0d8aff;
+  color: #0d8aff;
+}
+
+.showcase-link.secondary:hover {
+  background-color: rgba(13, 138, 255, 0.1);
+}
+
+.link-icon {
+  font-size: 1.2rem;
+  margin-right: 8px;
+}
+
+@keyframes gradientBg {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.analytics-overview h2,
+h2 {
+  font-size: 2rem;
+  margin: 1.5rem 0;
+  color: #fff;
 }
 
 /* Responsive adjustments */

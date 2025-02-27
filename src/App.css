@@ -262,16 +262,24 @@ img {
   gap: 2rem;
 }
 
+.services .service-card {
+  background-color: #1a1a1a !important;
+  color: #fff !important;
+  border: 1px solid #333;
+}
+
 .service-card {
-  background: #222;
-  padding: 2rem;
-  border-radius: 5px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease;
+  background-color: #1a1a1a !important;
+  color: #fff !important;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .service-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 .service-card h3 {
