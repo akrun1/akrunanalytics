@@ -127,19 +127,28 @@ function App() {
       <header className="header">
         <div className="container">
           <Link to="/" className="logo">akrun Analytics</Link>
-          <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
+          <div className="mobile-menu-container">
+            <button 
+              className="mobile-menu-toggle" 
+              onClick={toggleMobileMenu}
+              aria-label="Toggle navigation menu"
+            >
+              <div className={`hamburger ${mobileMenuOpen ? 'open' : ''}`}>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </button>
+          </div>
           <nav className={`main-nav ${mobileMenuOpen ? 'open' : ''}`}>
             <ul>
-              <li><a href="#services">Services</a></li>
-              <li><Link to="/analytics">Analytics</Link></li>
-              <li><Link to="/founder">About Founder</Link></li>
-              <li><a href="#contact">Contact</a></li>
+              <li><a href="#services" onClick={() => setMobileMenuOpen(false)}>Services</a></li>
+              <li><Link to="/analytics" onClick={() => setMobileMenuOpen(false)}>Analytics</Link></li>
+              <li><Link to="/founder" onClick={() => setMobileMenuOpen(false)}>About Founder</Link></li>
+              <li><a href="#contact" onClick={() => setMobileMenuOpen(false)}>Contact</a></li>
             </ul>
           </nav>
+          {mobileMenuOpen && <div className="menu-overlay" onClick={toggleMobileMenu}></div>}
         </div>
       </header>
 
