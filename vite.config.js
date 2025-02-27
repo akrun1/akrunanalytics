@@ -16,8 +16,10 @@ export default defineConfig(({ command }) => {
           // During build, replace imports from problematic directories with empty modules
           if (command === 'build' && 
               (id.includes('/gender-inequality/') || 
+               id.includes('/country-clustering/') ||
                id.includes('react-simple-maps') ||
-               id.includes('d3-scale'))) {
+               id.includes('d3-scale') ||
+               id.includes('react-chartjs-2'))) {
             console.log(' Ignoring import during build:', id);
             return {
               code: 'export default function() { return null; }',
@@ -48,12 +50,13 @@ export default defineConfig(({ command }) => {
       sourcemap: true, // Enable sourcemaps for debugging
       rollupOptions: {
         // Exclude problematic modules from the build
-        external: ['react-simple-maps', 'd3-scale'],
+        external: ['react-simple-maps', 'd3-scale', 'react-chartjs-2'],
         output: {
           // Provide global variables for the external modules
           globals: {
             'react-simple-maps': 'ReactSimpleMaps',
-            'd3-scale': 'D3Scale'
+            'd3-scale': 'D3Scale',
+            'react-chartjs-2': 'ReactChartJS2'
           }
         }
       }
