@@ -140,6 +140,7 @@ function App() {
         <div className="container">
           <Link to="/" className="logo">akrun Analytics</Link>
           
+          {/* Mobile Menu Button - Only visible on small screens */}
           <button 
             className="mobile-menu-button" 
             onClick={toggleMobileMenu}
@@ -150,6 +151,7 @@ function App() {
             <span></span>
           </button>
           
+          {/* Navigation Menu */}
           <nav className={`nav-menu ${mobileMenuOpen ? 'active' : ''}`}>
             <ul>
               <li><a href="#services" onClick={toggleMobileMenu}>Services</a></li>
