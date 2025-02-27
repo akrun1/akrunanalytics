@@ -117,7 +117,22 @@ function Founder() {
             <p>
               Interested in discussing how data science can transform your business?
             </p>
-            <Link to="/#contact" className="cta-button">Get in Touch</Link>
+            <Link 
+              to="/#contact" 
+              className="cta-button"
+              style={{ 
+                display: 'inline-block', 
+                animation: 'pulse 2s infinite',
+                fontSize: '20px',
+                padding: '15px 35px',
+                backgroundColor: '#ff6b00',
+                color: 'white',
+                fontWeight: 'bold',
+                textDecoration: 'none',
+                borderRadius: '8px',
+                boxShadow: '0 4px 15px rgba(255, 107, 0, 0.5)'
+              }}
+            >Get in Touch</Link>
           </div>
         </div>
       </main>
