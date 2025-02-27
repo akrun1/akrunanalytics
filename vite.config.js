@@ -74,8 +74,8 @@ export default defineConfig(({ command }) => {
       }
     ],
     server: {
-      port: 3000,
-      strictPort: false, // Try alternative port if 3000 is in use
+      port: 3003,
+      strictPort: true, // Use port 3003 consistently
       open: true, // Open browser automatically
       host: true,
       hmr: {
@@ -84,6 +84,11 @@ export default defineConfig(({ command }) => {
       proxy: {
         '/.netlify/functions': {
           target: 'http://localhost:8888',
+          changeOrigin: true,
+          rewrite: (path) => path
+        },
+        '/api': {
+          target: 'http://localhost:5001',
           changeOrigin: true,
           rewrite: (path) => path
         }
