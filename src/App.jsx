@@ -191,9 +191,9 @@ function App() {
               to="/snake-game" 
               className="game-link" 
               style={{
-                backgroundColor: '#4caf50', 
-                color: '#000000', 
-                fontWeight: 'bold',
+                backgroundColor: '#4caf50 !important', 
+                color: '#000000 !important', 
+                fontWeight: 'bold !important',
                 padding: '10px 15px',
                 borderRadius: '8px',
                 display: 'inline-flex',

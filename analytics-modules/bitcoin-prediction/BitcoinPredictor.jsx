@@ -66,23 +66,26 @@ const BitcoinPredictor = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    // Generate and use static data immediately
+    const fallbackData = generateFallbackData();
+    setHistoricalData(fallbackData.dates.slice(0, 31).map((date, index) => ({
+      date,
+      price: fallbackData.historicalPrices[index]
+    })));
+    
+    setPredictedData(fallbackData.dates.slice(31).map((date, index) => ({
+      date,
+      price: fallbackData.predictedPrices[index],
+      lowerBound: fallbackData.lowerBound[index],
+      upperBound: fallbackData.upperBound[index]
+    })));
+    
+    // Set loading to false immediately so the chart renders right away
+    setIsLoading(false);
+    
+    // Try to fetch real data in the background
+    const fetchRealData = async () => {
       try {
-        // Display static data immediately to ensure visualization
-        const fallbackData = generateFallbackData();
-        setHistoricalData(fallbackData.dates.slice(0, 31).map((date, index) => ({
-          date,
-          price: fallbackData.historicalPrices[index]
-        })));
-        
-        setPredictedData(fallbackData.dates.slice(31).map((date, index) => ({
-          date,
-          price: fallbackData.predictedPrices[index],
-          lowerBound: fallbackData.lowerBound[index],
-          upperBound: fallbackData.upperBound[index]
-        })));
-        
-        // Still try to fetch real data, but we already have a visualization showing
         const response = await axios.get('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart', {
           params: {
             vs_currency: 'usd',
@@ -102,44 +105,43 @@ const BitcoinPredictor = () => {
             };
           });
           
-          // Only update if we got real data
-          if (formattedHistorical.length > 0) {
-            setHistoricalData(formattedHistorical);
+          // Update with real data if available
+          setHistoricalData(formattedHistorical);
+          
+          // Generate predictions based on real data
+          const lastPrice = formattedHistorical[formattedHistorical.length - 1].price;
+          const lastDate = new Date(formattedHistorical[formattedHistorical.length - 1].date);
+          
+          // Generate simple predictions for the next 7 days
+          const predictions = [];
+          for (let i = 1; i <= 7; i++) {
+            const nextDate = new Date(lastDate);
+            nextDate.setDate(lastDate.getDate() + i);
             
-            // Generate mock prediction data based on the real historical data
-            const lastPrice = formattedHistorical[formattedHistorical.length - 1].price;
-            const mockPredictions = [];
-            const lastDate = new Date(formattedHistorical[formattedHistorical.length - 1].date);
+            // Simple prediction with some random variation
+            const randomVariation = Math.random() * 3000 - 1500;
+            const trendFactor = 1 + (i * 0.005); // Small upward trend
+            const predictedPrice = lastPrice * trendFactor + randomVariation;
+            const lowerBound = predictedPrice * 0.9;
+            const upperBound = predictedPrice * 1.1;
             
-            for (let i = 1; i <= 7; i++) {
-              const predictionDate = new Date(lastDate);
-              predictionDate.setDate(lastDate.getDate() + i);
-              
-              // Simple random walk prediction
-              const randomChange = (Math.random() - 0.45) * 0.05; // Slight upward bias
-              const predictedPrice = lastPrice * (1 + randomChange * i);
-              const confidence = 0.05 * i; // Increasing uncertainty over time
-              
-              mockPredictions.push({
-                date: predictionDate.toISOString().split('T')[0],
-                price: predictedPrice,
-                lowerBound: predictedPrice * (1 - confidence),
-                upperBound: predictedPrice * (1 + confidence)
-              });
-            }
-            
-            setPredictedData(mockPredictions);
+            predictions.push({
+              date: nextDate.toISOString().split('T')[0],
+              price: predictedPrice,
+              lowerBound,
+              upperBound
+            });
           }
+          
+          setPredictedData(predictions);
         }
-      } catch (error) {
-        console.error('Error fetching Bitcoin data:', error);
-        // We already have fallback data, so no need to show error state
-      } finally {
-        setIsLoading(false);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        // No need to set error state - we already have fallback data showing
       }
     };
     
-    fetchData();
+    fetchRealData();
   }, []);
 
   const renderChart = () => {

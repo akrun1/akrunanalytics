@@ -33,9 +33,9 @@ function Analytics() {
                 to="/analytics-dashboard" 
                 className="showcase-link"
                 style={{
-                  backgroundColor: '#0d6efd',
-                  color: '#000000',
-                  fontWeight: 'bold',
+                  backgroundColor: '#0d6efd !important',
+                  color: '#000000 !important', 
+                  fontWeight: 'bold !important',
                   padding: '12px 20px',
                   borderRadius: '8px',
                   display: 'inline-flex',
