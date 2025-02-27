@@ -57,6 +57,41 @@ const BitcoinPredictor = () => {
       } catch (err) {
         console.error('Error fetching Bitcoin data:', err);
         setError(err.message);
+        
+        // Generate fallback data for the static build
+        const today = new Date();
+        const fallbackHistorical = [];
+        const fallbackPredictions = [];
+        
+        // Generate 30 days of historical data
+        for (let i = 30; i >= 1; i--) {
+          const date = new Date(today);
+          date.setDate(date.getDate() - i);
+          const basePrice = 40000 + Math.random() * 5000;
+          fallbackHistorical.push({
+            date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            price: basePrice
+          });
+        }
+        
+        // Generate 7 days of prediction data
+        for (let i = 1; i <= 7; i++) {
+          const date = new Date(today);
+          date.setDate(date.getDate() + i);
+          const lastHistorical = fallbackHistorical[fallbackHistorical.length - 1];
+          const basePrice = lastHistorical ? lastHistorical.price : 45000;
+          const prediction = basePrice * (1 + (Math.random() * 0.02 - 0.01));
+          
+          fallbackPredictions.push({
+            date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            prediction: prediction,
+            upperBound: prediction * 1.05,
+            lowerBound: prediction * 0.95
+          });
+        }
+        
+        setHistoricalData(fallbackHistorical);
+        setPredictedData(fallbackPredictions);
         setIsLoading(false);
       }
     };
