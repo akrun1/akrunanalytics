@@ -34,7 +34,7 @@ function Analytics() {
                 className="showcase-link"
                 style={{
                   backgroundColor: '#0d6efd',
-                  color: '#ffffff',
+                  color: '#000000',
                   fontWeight: 'bold',
                   padding: '12px 20px',
                   borderRadius: '8px',

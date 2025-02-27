@@ -192,7 +192,7 @@ function App() {
               className="game-link" 
               style={{
                 backgroundColor: '#4caf50', 
-                color: '#0000ff', 
+                color: '#000000', 
                 fontWeight: 'bold',
                 padding: '10px 15px',
                 borderRadius: '8px',
