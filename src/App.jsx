@@ -12,34 +12,19 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const toggleMobileMenu = () => {
-    console.log('Toggling mobile menu, current state:', mobileMenuOpen);
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  // Close menu if screen is resized above mobile breakpoint
+  // Close mobile menu when window is resized
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 768 && mobileMenuOpen) {
         setMobileMenuOpen(false);
       }
     };
-
+    
     window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [mobileMenuOpen]);
-
-  // Prevent scrolling when mobile menu is open
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, [mobileMenuOpen]);
 
   useEffect(() => {
@@ -155,34 +140,24 @@ function App() {
         <div className="container">
           <Link to="/" className="logo">akrun Analytics</Link>
           
-          {/* Mobile Menu Button - Now sits outside the container for fixed positioning */}
           <button 
-            className="mobile-menu-toggle" 
+            className="mobile-menu-button" 
             onClick={toggleMobileMenu}
             aria-label="Toggle navigation menu"
           >
-            <div className={`hamburger ${mobileMenuOpen ? 'open' : ''}`}>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
           
-          {/* Navigation Menu */}
-          <nav className={`main-nav ${mobileMenuOpen ? 'open' : ''}`}>
+          <nav className={`nav-menu ${mobileMenuOpen ? 'active' : ''}`}>
             <ul>
-              <li><a href="#services" onClick={() => setMobileMenuOpen(false)}>Services</a></li>
-              <li><Link to="/analytics" onClick={() => setMobileMenuOpen(false)}>Analytics</Link></li>
-              <li><Link to="/founder" onClick={() => setMobileMenuOpen(false)}>About Founder</Link></li>
-              <li><a href="#contact" onClick={() => setMobileMenuOpen(false)}>Contact</a></li>
+              <li><a href="#services" onClick={toggleMobileMenu}>Services</a></li>
+              <li><Link to="/analytics" onClick={toggleMobileMenu}>Analytics</Link></li>
+              <li><Link to="/founder" onClick={toggleMobileMenu}>About Founder</Link></li>
+              <li><a href="#contact" onClick={toggleMobileMenu}>Contact</a></li>
             </ul>
           </nav>
-          
-          {/* Overlay that appears when menu is open */}
-          <div 
-            className={`menu-overlay ${mobileMenuOpen ? 'active' : ''}`} 
-            onClick={toggleMobileMenu}
-          ></div>
         </div>
       </header>
 
