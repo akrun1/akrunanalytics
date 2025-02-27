@@ -154,19 +154,21 @@ function App() {
       <header className="header">
         <div className="container">
           <Link to="/" className="logo">akrun Analytics</Link>
-          <div className="mobile-menu-container">
-            <button 
-              className="mobile-menu-toggle" 
-              onClick={toggleMobileMenu}
-              aria-label="Toggle navigation menu"
-            >
-              <div className={`hamburger ${mobileMenuOpen ? 'open' : ''}`}>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </button>
-          </div>
+          
+          {/* Mobile Menu Button - Now sits outside the container for fixed positioning */}
+          <button 
+            className="mobile-menu-toggle" 
+            onClick={toggleMobileMenu}
+            aria-label="Toggle navigation menu"
+          >
+            <div className={`hamburger ${mobileMenuOpen ? 'open' : ''}`}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </button>
+          
+          {/* Navigation Menu */}
           <nav className={`main-nav ${mobileMenuOpen ? 'open' : ''}`}>
             <ul>
               <li><a href="#services" onClick={() => setMobileMenuOpen(false)}>Services</a></li>
@@ -175,7 +177,12 @@ function App() {
               <li><a href="#contact" onClick={() => setMobileMenuOpen(false)}>Contact</a></li>
             </ul>
           </nav>
-          {mobileMenuOpen && <div className="menu-overlay" onClick={toggleMobileMenu}></div>}
+          
+          {/* Overlay that appears when menu is open */}
+          <div 
+            className={`menu-overlay ${mobileMenuOpen ? 'active' : ''}`} 
+            onClick={toggleMobileMenu}
+          ></div>
         </div>
       </header>
 
