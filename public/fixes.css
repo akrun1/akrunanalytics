@@ -1,8 +1,43 @@
 /* Emergency CSS fixes */
+/* Base styles to ensure content is always visible */
+html, body {
+  background-color: #121212 !important;
+  color: #ffffff !important;
+  font-family: 'Inter', 'Montserrat', 'Poppins', sans-serif !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#root {
+  min-height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Make sure headers are visible */
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important;
+}
+
+/* Link styling */
+a {
+  color: #646cff !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: #747bff !important;
+  text-decoration: underline !important;
+}
+
+/* Service card styles */
 .service-card {
   background-color: #1a1a1a !important;
   color: #fff !important;
   border: 1px solid #333 !important;
+  padding: 1rem !important;
+  border-radius: 8px !important;
+  margin-bottom: 1rem !important;
 }
 
 .service-card p {
@@ -11,4 +46,39 @@
 
 .service-card h3 {
   color: #646cff !important;
+}
+
+/* Navbar styles */
+.navbar {
+  background-color: #1a1a1a !important;
+  padding: 1rem !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+/* Main content area */
+.main-content {
+  padding: 2rem !important;
+}
+
+/* Loading indicators */
+.loading-message {
+  text-align: center !important;
+  padding: 2rem !important;
+  background-color: #1a1a1a !important;
+  border-radius: 8px !important;
+  margin: 1rem 0 !important;
+}
+
+/* Fallback for removed visualizations */
+.visualization-placeholder {
+  height: 300px !important;
+  background-color: #1a1a1a !important;
+  border: 1px solid #333 !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 1rem 0 !important;
 }
