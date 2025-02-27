@@ -14,17 +14,30 @@ export default defineConfig(({ command }) => {
         // This plugin will ignore imported files that match these patterns during build
         transform(code, id) {
           // During build, replace imports from problematic directories with empty modules
-          if (command === 'build' && 
-              (id.includes('/gender-inequality/') || 
-               id.includes('/country-clustering/') ||
-               id.includes('react-simple-maps') ||
-               id.includes('d3-scale') ||
-               id.includes('react-chartjs-2'))) {
-            console.log(' Ignoring import during build:', id);
-            return {
-              code: 'export default function() { return null; }',
-              map: null
-            };
+          // ONLY if they are importing the problematic dependencies
+          if (command === 'build') {
+            // Only transform analytics module files that are importing the problematic packages
+            if ((id.includes('/analytics-modules/') || id.includes('/components/analytics-modules/')) && 
+                (code.includes('react-simple-maps') || 
+                 code.includes('d3-scale') || 
+                 code.includes('react-chartjs-2'))) {
+              console.log(' Replacing problematic imports in:', id);
+              return {
+                code: 'import React from "react"; export default function() { return React.createElement("div", { style: { padding: "20px", textAlign: "center" } }, React.createElement("p", null, "Visualization loading...")); }',
+                map: null
+              };
+            }
+            
+            // Also transform direct imports of problematic packages
+            if (id.includes('react-simple-maps') || 
+                id.includes('d3-scale') || 
+                id.includes('react-chartjs-2')) {
+              console.log(' Ignoring external dependency:', id);
+              return {
+                code: 'export default function() { return null; }',
+                map: null
+              };
+            }
           }
         },
       }
