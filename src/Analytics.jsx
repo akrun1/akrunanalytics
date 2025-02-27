@@ -33,13 +33,17 @@ function Analytics() {
                 to="/analytics-dashboard" 
                 className="showcase-link"
                 style={{
-                  backgroundColor: '#0d6efd !important',
-                  color: '#000000 !important', 
-                  fontWeight: 'bold !important',
+                  backgroundColor: '#0d6efd',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: '16px',
                   padding: '12px 20px',
                   borderRadius: '8px',
+                  border: '2px solid #0056b3',
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
                   display: 'inline-flex',
                   alignItems: 'center',
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.2)',
                   textDecoration: 'none',
                   marginTop: '10px'
                 }}

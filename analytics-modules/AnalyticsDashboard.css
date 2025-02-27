@@ -202,6 +202,53 @@
   100% { opacity: 0.6; }
 }
 
+/* Ensure visualization content is always visible */
+.visualization-container {
+  min-height: 300px;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  margin: 20px 0;
+  display: block !important;
+  visibility: visible !important;
+  color: #ffffff;
+}
+
+.mock-chart {
+  min-height: 250px;
+  display: block !important;
+  visibility: visible !important;
+}
+
+.bitcoin-predictor-container,
+.country-clustering-container,
+.gender-inequality-map-container {
+  min-height: 350px;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  padding: 20px;
+  display: block !important;
+  visibility: visible !important;
+}
+
+.world-map,
+.map-container,
+.region,
+.cluster-scatter-plot {
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* Make sure Canvas elements are visible */
+canvas {
+  display: block !important;
+  visibility: visible !important;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  min-height: 200px;
+}
+
 @media (max-width: 768px) {
   .tab-navigation {
     flex-direction: column;
