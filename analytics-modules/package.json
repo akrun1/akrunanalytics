@@ -1,0 +1,13 @@
+{
+  "name": "akrunanalytics-advanced-modules",
+  "version": "1.0.0",
+  "description": "Advanced analytics visualization modules",
+  "main": "index.js",
+  "dependencies": {
+    "chart.js": "^4.4.1",
+    "d3-scale": "^4.0.2",
+    "react-chartjs-2": "^5.2.0",
+    "react-simple-maps": "^3.0.0",
+    "react-tooltip": "^5.25.1"
+  }
+}

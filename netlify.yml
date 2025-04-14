@@ -1,0 +1,17 @@
+build:
+  publish: dist
+  command: npm run build
+
+  # Skip Python detection
+  ignore_requirements_txt: true
+  
+  environment:
+    NODE_VERSION: 18
+    NODE_ENV: production
+
+  processing:
+    skip_processing: true
+
+# Production branch
+production:
+  branch: frontend-only

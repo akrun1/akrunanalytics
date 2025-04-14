@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debug Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f5f5f5;
+    }
+    .log-entry {
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .error { background-color: #ffebee; }
+    .info { background-color: #e3f2fd; }
+    .warn { background-color: #fff8e1; }
+  </style>
+</head>
+<body>
+  <h1>React Debug Page</h1>
+  <button id="checkReact">Check React Loading</button>
+  <button id="clearLogs">Clear Logs</button>
+  <div id="log"></div>
+
+  <script>
+    // Function to add log entry
+    function addLog(message, type = 'info') {
+      const logDiv = document.getElementById('log');
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.textContent = message;
+      logDiv.prepend(entry);
+    }
+
+    // Check if React is loaded
+    document.getElementById('checkReact').addEventListener('click', () => {
+      try {
+        const reactScript = document.createElement('script');
+        reactScript.src = 'https://unpkg.com/react@18/umd/react.development.js';
+        reactScript.onload = () => {
+          addLog('React loaded successfully');
+          try {
+            const reactDOMScript = document.createElement('script');
+            reactDOMScript.src = 'https://unpkg.com/react-dom@18/umd/react-dom.development.js';
+            reactDOMScript.onload = () => {
+              addLog('ReactDOM loaded successfully');
+              
+              // Create a test component
+              try {
+                const container = document.createElement('div');
+                document.body.appendChild(container);
+                
+                const element = React.createElement('h2', null, 'Hello from React!');
+                ReactDOM.render(element, container);
+                
+                addLog('React rendering works!');
+              } catch (err) {
+                addLog('Error rendering React component: ' + err.message, 'error');
+              }
+            };
+            reactDOMScript.onerror = () => {
+              addLog('Failed to load ReactDOM', 'error');
+            };
+            document.head.appendChild(reactDOMScript);
+          } catch (err) {
+            addLog('Error setting up ReactDOM: ' + err.message, 'error');
+          }
+        };
+        reactScript.onerror = () => {
+          addLog('Failed to load React', 'error');
+        };
+        document.head.appendChild(reactScript);
+      } catch (err) {
+        addLog('Error: ' + err.message, 'error');
+      }
+    });
+
+    // Clear logs
+    document.getElementById('clearLogs').addEventListener('click', () => {
+      document.getElementById('log').innerHTML = '';
+    });
+
+    // Add initial log
+    addLog('Debug page loaded');
+  </script>
+</body>
+</html>

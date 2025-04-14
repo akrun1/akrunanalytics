@@ -1,0 +1,399 @@
+/* Emergency CSS fixes to maintain styling similar to the original App.css */
+
+/* Base styles to ensure content is always visible */
+html, body {
+  background-color: #121212 !important;
+  font-family: 'Inter', 'Montserrat', 'Poppins', sans-serif !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #e0e0e0 !important;
+}
+
+#root {
+  min-height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Make sure headers are visible with original styling */
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important;
+}
+
+h1 {
+  font-size: 3rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(45deg, #007bff, #00c6ff) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  text-shadow: 0 2px 10px rgba(0, 123, 255, 0.2) !important;
+}
+
+/* Restore original link styling */
+a {
+  color: #007bff !important;
+  text-decoration: none !important;
+  transition: color 0.3s !important;
+}
+
+a:hover {
+  color: #0056b3 !important;
+  text-decoration: underline !important;
+}
+
+/* Restore original button styling */
+.button,
+button,
+.btn {
+  display: inline-block !important;
+  background: #007bff !important;
+  color: #fff !important;
+  padding: 0.9rem 2rem !important;
+  border: none !important;
+  border-radius: 50px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  font-size: 1rem !important;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.button:hover,
+button:hover,
+.btn:hover {
+  background: #0056b3 !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 14px rgba(0, 123, 255, 0.4) !important;
+}
+
+/* Primary button style */
+.button.primary,
+.primary {
+  background-color: #007bff !important;
+  color: #fff !important;
+}
+
+/* Service card styles - maintain original styling */
+.service-card {
+  background-color: #1a1a1a !important;
+  color: #fff !important;
+  border: 1px solid #333 !important;
+  border-radius: 8px !important;
+  padding: 1.5rem !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+  transition: transform 0.3s, box-shadow 0.3s !important;
+  margin-bottom: 1rem !important;
+}
+
+.service-card p {
+  color: #e0e0e0 !important;
+}
+
+.service-card h3 {
+  color: #007bff !important;
+}
+
+/* Navigation styling */
+.main-nav a,
+.nav-link,
+.nav-item a,
+.menu-item a,
+.navbar a {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+}
+
+.main-nav a:hover,
+.nav-link:hover {
+  color: #007bff !important;
+}
+
+/* Component containers */
+.bitcoin-predictor-container,
+.country-clustering-container,
+.gender-inequality-map-container {
+  background-color: #1a1a1a !important;
+  border: 1px solid #333 !important;
+  border-radius: 8px !important;
+  padding: 1.5rem !important;
+  margin: 1rem 0 !important;
+  display: block !important;
+  min-height: 400px !important;
+}
+
+/* Game component styling */
+.games {
+  margin-bottom: 2rem !important;
+  padding: 1rem !important;
+  background-color: #1a1a1a !important;
+  border-radius: 5px !important;
+  border-left: 4px solid #4CAF50 !important;
+}
+
+.games h3 {
+  color: #4CAF50 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Hero section */
+.hero {
+  padding: 2rem 0 !important;
+  color: #fff !important;
+  background-color: #111 !important;
+  text-align: center !important;
+}
+
+.hero p {
+  font-size: 1.2rem !important;
+  margin-bottom: 2rem !important;
+  color: #e0e0e0 !important;
+}
+
+/* GET STARTED button specific */
+a[href="#contact"].button.primary {
+  display: inline-block !important;
+  background: #007bff !important;
+  color: #fff !important;
+  padding: 0.9rem 2rem !important;
+  border: none !important;
+  border-radius: 50px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+}
+
+/* Navbar styles */
+.navbar {
+  background-color: #1a1a1a !important;
+  padding: 1rem !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+/* Main content area */
+.main-content {
+  padding: 2rem !important;
+}
+
+/* Loading indicators */
+.loading-message {
+  text-align: center !important;
+  padding: 2rem !important;
+  background-color: #1a1a1a !important;
+  border-radius: 8px !important;
+  margin: 1rem 0 !important;
+}
+
+/* Fallback for removed visualizations */
+.visualization-placeholder {
+  height: 300px !important;
+  background-color: #1a1a1a !important;
+  border: 1px solid #333 !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 1rem 0 !important;
+}
+
+/* Fix button text color */
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+.btn {
+  color: #ffffff !important;
+  font-weight: bold !important;
+}
+
+/* Specific fix for Get Started button */
+a.button-primary,
+button.button-primary,
+.get-started-btn,
+a[href*="get-started"],
+a:has(> span:contains("Get Started")),
+a:contains("Get Started") {
+  color: #ffffff !important;
+  font-weight: bold !important;
+  background-color: #0066ff !important;
+  border-radius: 4px !important;
+  padding: 0.75rem 1.5rem !important;
+  text-align: center !important;
+  display: inline-block !important;
+}
+
+/* Fix for Play Snake Game link */
+a[href*="snake-game"],
+a:contains("Snake Game"),
+a:has(> span:contains("Snake Game")) {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  padding: 0.5rem 1rem !important;
+  background-color: #2a2a2a !important;
+  border-radius: 4px !important;
+  display: inline-block !important;
+  margin: 0.25rem !important;
+}
+
+/* Fix for Explore Analytics Dashboard link */
+a[href*="analytics-dashboard"],
+a:contains("Analytics Dashboard"),
+a:has(> span:contains("Analytics Dashboard")) {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  padding: 0.5rem 1rem !important;
+  background-color: #2a2a2a !important;
+  border-radius: 4px !important;
+  display: inline-block !important;
+  margin: 0.25rem !important;
+}
+
+/* More specific styles for any buttons */
+a.nav-link,
+.nav-item a,
+.menu-item a,
+.navbar a {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+/* Very specific fixes for analytics modules based on screenshots */
+
+/* Fix for Analytics Dashboard link in header navigation */
+.main-nav ul li a[href="/analytics"],
+.main-nav ul li a[href*="analytics"],
+nav a[href="/analytics"] {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+/* Fix for Explore Analytics Dashboard button (blue background with white text) */
+a[href*="analytics-dashboard"],
+a[href="/analytics"],
+a:contains("Analytics Dashboard"),
+a:has(> span:contains("Analytics Dashboard")),
+.analytics-dashboard-button,
+a.analytics-dashboard-button,
+nav a[href="/analytics"],
+.main-nav ul li a[href="/analytics"] {
+  display: flex !important;
+  align-items: center !important;
+  background-color: #0d6efd !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  margin: 0.5rem 0 !important;
+  width: max-content !important;
+}
+
+/* Fix for Play Snake Game button (green background with blue text) */
+a[href*="snake-game"],
+a[href="/snake-game"],
+a.game-link,
+.game-link,
+a:contains("Snake Game"),
+a:has(> span:contains("Snake Game")),
+.snake-game-button {
+  display: flex !important;
+  align-items: center !important;
+  background-color: #4caf50 !important;
+  color: #0000ff !important;
+  font-weight: 600 !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  margin: 0.5rem 0 !important;
+  width: max-content !important;
+}
+
+/* Hide visualization loading text globally */
+.tab-content div:contains("Visualization loading..."),
+div:contains("Visualization loading..."),
+p:contains("Visualization loading...") {
+  display: none !important;
+}
+
+/* Fix for visualization placeholders to show something useful */
+.visualization-loading,
+[data-testid="visualization-loading"],
+*:contains("Visualization loading") {
+  color: #ffffff !important;
+  background-color: #1a1a1a !important;
+  border: 1px solid #333 !important;
+  padding: 1rem !important;
+  text-align: center !important;
+  border-radius: 8px !important;
+  margin: 1rem 0 !important;
+  position: relative !important;
+}
+
+/* Add a more informative message with animation */
+.visualization-loading::after {
+  content: "Data visualization will load in client-side mode" !important;
+  display: block !important;
+  margin-top: 0.5rem !important;
+  font-style: italic !important;
+  color: #aaa !important;
+  animation: pulse 2s infinite !important;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+/* Fix for the visualization loading text */
+.visualization-loading,
+[data-testid="visualization-loading"],
+*:contains("Visualization loading") {
+  color: #ffffff !important;
+  background-color: #1a1a1a !important;
+  border: 1px solid #333 !important;
+  padding: 1rem !important;
+  text-align: center !important;
+  border-radius: 8px !important;
+  margin: 1rem 0 !important;
+}
+
+/* Fix for analytics showcase buttons in blue */
+a.bitcoin-prediction-button,
+a[href*="bitcoin-prediction"],
+a:contains("Bitcoin Prediction"),
+a:has(> span:contains("Bitcoin Prediction")),
+a.country-clustering-button,
+a[href*="country-clustering"],
+a:contains("Country Clustering"),
+a:has(> span:contains("Country Clustering")),
+a.gender-inequality-button,
+a[href*="gender-inequality"],
+a:contains("Gender Inequality Map"),
+a:has(> span:contains("Gender Inequality Map")) {
+  display: inline-flex !important;
+  align-items: center !important;
+  background-color: #0d6efd !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 50px !important;
+  text-decoration: none !important;
+  margin: 0.5rem !important;
+  width: max-content !important;
+}
